@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>RoleMiner.Library</Title>
+    <PackageTags>IAM;Role</PackageTags>
+    <PackageReleaseNotes>First release of the RoleMining library.
+
+Includes the method MineRoles and some classes</PackageReleaseNotes>
+    <Description>A package aiming to reduce extra-accesses for an IAM system.</Description>
+    <Authors>Dany Gonzalez-Teigland</Authors>
+    <Company>IdentityStream</Company>
+    <Copyright>Copyright (c) 2024 IdentityStream AS</Copyright>
+    <PackageProjectUrl>https://github.com/IdentityStream/RoleMining/tree/main</PackageProjectUrl>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/IdentityStream/RoleMining/tree/main</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="ReadMe.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
