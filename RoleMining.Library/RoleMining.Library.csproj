@@ -21,7 +21,7 @@ Includes the method MineRoles and some classes</PackageReleaseNotes>
   <ItemGroup>
     <None Update="README.md">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>/</PackagePath>
     </None>
   </ItemGroup>
 
