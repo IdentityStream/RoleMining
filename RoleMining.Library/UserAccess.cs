@@ -1,5 +1,8 @@
 namespace RoleMining.Library
 {
+    /// <summary>
+    /// UserAccess object
+    /// </summary>
     public class UserAccess
 	{
 		public string UserID { get; set; }

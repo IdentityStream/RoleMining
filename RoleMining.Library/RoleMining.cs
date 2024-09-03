@@ -2,29 +2,23 @@
 namespace RoleMining.Library
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
 
     public class RoleMining
     {
+        /// <summary>
+        /// Mines roles based on user accesses and users in roles
+        /// </summary>
+        /// <param name="userAccesses">A IEnumerable of <seealso cref="UserAccess">UserAccess</seealso> objects</param>
+        /// <param name="userInRoles"></param>
+        /// <returns></returns>
         public static List<RatioAccessLevel> MineRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
-            if (userAccesses == null)
-            {
-                throw new ArgumentNullException("userAccesses");
-            }
-            if (userInRoles == null) {
-                throw new ArgumentNullException("userInRoles");
-            }
-            if (!userAccesses.Any())
-            {
-                throw new ArgumentException("User accesses cannot be empty", nameof(userAccesses));
-            }
-            if (!userInRoles.Any())
-            {
-                throw new ArgumentException("User in roles cannot be empty", nameof(userInRoles));
-            }
+            InputValidator.CheckIfEmpty(userAccesses, nameof(userAccesses));
+            InputValidator.CheckIfEmpty(userInRoles, nameof(userInRoles));
 
             // Input testDataAccess and testDataUserInRole from RoleMining.Console/Program.cs
             // Return a RatioAccessLevel object
@@ -87,7 +81,7 @@ namespace RoleMining.Library
 
 
 
-        public static IEnumerable<KeyValuePair<string, UserAccess>> ReturnDistinct(
+            public static IEnumerable<KeyValuePair<string, UserAccess>> ReturnDistinct(
             IEnumerable<KeyValuePair<string, UserAccess>> source,
             Func<UserAccess, string> selector)
         {
