@@ -16,10 +16,12 @@ Includes the method MineRoles and some classes</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/IdentityStream/RoleMining</RepositoryUrl>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<EnablePackageValidation>true</EnablePackageValidation>
+	<PackageIcon>icon.png</PackageIcon>
+	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-	  <None Include="README.md" Pack="true" PackagePath=""/>
+	  <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +33,17 @@ Includes the method MineRoles and some classes</PackageReleaseNotes>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>  
 
 </Project>
