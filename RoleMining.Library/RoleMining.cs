@@ -89,10 +89,10 @@ namespace RoleMining.Library
 
 
         /// <summary>
-        /// Helper function to return distinct values from a dictionary containing <seealso cref="UserAccess"></seealso> objects using specific selector
+        /// Helper function to return distinct values from a dictionary containing <seealso cref="UserAccess"></seealso> objects using specific selector.
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="selector"></param>
+        /// <param name="source">Dictionary with <seealso cref="UserAccess">UserAccess</seealso> objects.</param>
+        /// <param name="selector">The parameter that should be distinct. This is the key in this instance.</param>
         /// <returns></returns>
         private static IEnumerable<KeyValuePair<string, UserAccess>> ReturnDistinct( // This can be done using LINQ functions; .groupby and .select(g => g.first)
             IEnumerable<KeyValuePair<string, UserAccess>> source,
