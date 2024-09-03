@@ -156,4 +156,32 @@ public class RoleMiningTests
         Assert.Contains(result, r => r.Role == "C" && r.Access == "Read" && r.Ratio == 0.5);
         Assert.Contains(result, r => r.Role == "D" && r.Access == "Read" && r.Ratio == 0.5);
     }
+
+    //[Fact]
+    //public void RecommendToBakeIntoRole_ShouldReturnCorrectRecommendations()
+    //{
+    //    var ratioAccessLevels = new List<RatioAccessLevel>
+    //    {
+    //        new RatioAccessLevel { Role = "A", Access = "Read", Ratio = 0.6, TotalUsers = 10 },
+    //        new RatioAccessLevel { Role = "A", Access = "Write", Ratio = 0.4, TotalUsers = 10 },
+    //        new RatioAccessLevel { Role = "B", Access = "Read", Ratio = 0.7, TotalUsers = 5 },
+    //        new RatioAccessLevel { Role = "B", Access = "Write", Ratio = 0.3, TotalUsers = 5 }
+    //    };
+    //
+    //    // Act
+    //    var result = RoleMining.RecommendToBakeIntoRole(ratioAccessLevels);
+    //
+    //    // Assert
+    //    Assert.Equal(2, result.Count);
+    //
+    //    var recommendationA = result.Find(r => r.Role == "A" && r.Access == "Read");
+    //    Assert.NotNull(recommendationA);
+    //    Assert.Equal(10, recommendationA.TotalUsers);
+    //    Assert.Equal(0.6, recommendationA.ratio);
+    //
+    //    var recommendationB = result.Find(r => r.Role == "B" && r.Access == "Read");
+    //    Assert.NotNull(recommendationB);
+    //    Assert.Equal(5, recommendationB.TotalUsers);
+    //    Assert.Equal(0.7, recommendationB.ratio);
+    //}
 }
