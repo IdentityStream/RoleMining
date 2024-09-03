@@ -11,10 +11,10 @@ public class RoleMiningTests
     {
         var userAccesses = new List<UserAccess>
     {
-        new UserAccess { UserID = "1", RoleID = "A", AccessLevelID = "Read", IsExtraAccess = true },
-        new UserAccess { UserID = "2", RoleID = "A", AccessLevelID = "Write", IsExtraAccess = false },
-        new UserAccess { UserID = "3", RoleID = "A", AccessLevelID = "Read", IsExtraAccess = false },
-        new UserAccess { UserID = "4", RoleID = "A", AccessLevelID = "Write", IsExtraAccess = true }
+        new UserAccess { UserID = "1", RoleID = "A", AccessID = "Read", IsExtraAccess = true },
+        new UserAccess { UserID = "2", RoleID = "A", AccessID = "Write", IsExtraAccess = false },
+        new UserAccess { UserID = "3", RoleID = "A", AccessID = "Read", IsExtraAccess = false },
+        new UserAccess { UserID = "4", RoleID = "A", AccessID = "Write", IsExtraAccess = true }
     };
 
         var userInRoles = new List<UserInRole>
@@ -28,8 +28,8 @@ public class RoleMiningTests
         var result = RoleMining.MineRoles(userAccesses, userInRoles);
 
         Assert.Equal(2, result.Count);
-        Assert.Contains(result, r => r.Role == "A" && r.Access == "Read" && r.Ratio == 0.25);
-        Assert.Contains(result, r => r.Role == "A" && r.Access == "Write" && r.Ratio == 0.25);
+        Assert.Contains(result, r => r.RoleID == "A" && r.AccessID == "Read" && r.Ratio == 0.25);
+        Assert.Contains(result, r => r.RoleID == "A" && r.AccessID == "Write" && r.Ratio == 0.25);
     }
 
     [Fact]
@@ -37,17 +37,17 @@ public class RoleMiningTests
     {
         var userAccesses = new List<UserAccess>
         {
-            new UserAccess { UserID = "1", RoleID = "Admin", AccessLevelID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "1", RoleID = "Admin", AccessLevelID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "2", RoleID = "Admin", AccessLevelID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "2", RoleID = "User", AccessLevelID = "Read", IsExtraAccess = false },
-            new UserAccess { UserID = "3", RoleID = "User", AccessLevelID = "Read", IsExtraAccess = false },
-            new UserAccess { UserID = "3", RoleID = "User", AccessLevelID = "Write", IsExtraAccess = true },
-            new UserAccess { UserID = "4", RoleID = "User", AccessLevelID = "Write", IsExtraAccess = true },
-            new UserAccess { UserID = "4", RoleID = "Admin", AccessLevelID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "4", RoleID = "Admin", AccessLevelID = "Read", IsExtraAccess = true }, // Duplicate
-            new UserAccess { UserID = "5", RoleID = "Admin", AccessLevelID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "6", RoleID = "User", AccessLevelID = "Read", IsExtraAccess = false }
+            new UserAccess { UserID = "1", RoleID = "Admin", AccessID = "Read", IsExtraAccess = true },
+            new UserAccess { UserID = "1", RoleID = "Admin", AccessID = "Write", IsExtraAccess = false },
+            new UserAccess { UserID = "2", RoleID = "Admin", AccessID = "Read", IsExtraAccess = true },
+            new UserAccess { UserID = "2", RoleID = "User", AccessID = "Read", IsExtraAccess = false },
+            new UserAccess { UserID = "3", RoleID = "User", AccessID = "Read", IsExtraAccess = false },
+            new UserAccess { UserID = "3", RoleID = "User", AccessID = "Write", IsExtraAccess = true },
+            new UserAccess { UserID = "4", RoleID = "User", AccessID = "Write", IsExtraAccess = true },
+            new UserAccess { UserID = "4", RoleID = "Admin", AccessID = "Read", IsExtraAccess = true },
+            new UserAccess { UserID = "4", RoleID = "Admin", AccessID = "Read", IsExtraAccess = true }, // Duplicate
+            new UserAccess { UserID = "5", RoleID = "Admin", AccessID = "Write", IsExtraAccess = false },
+            new UserAccess { UserID = "6", RoleID = "User", AccessID = "Read", IsExtraAccess = false }
         };
 
         var userInRoles = new List<UserInRole>
@@ -68,8 +68,8 @@ public class RoleMiningTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Contains(result, r => r.Role == "Admin" && r.Access == "Read" && r.Ratio == 0.75);
-        Assert.Contains(result, r => r.Role == "User" && r.Access == "Write" && r.Ratio == 0.5);
+        Assert.Contains(result, r => r.RoleID == "Admin" && r.AccessID == "Read" && r.Ratio == 0.75);
+        Assert.Contains(result, r => r.RoleID == "User" && r.AccessID == "Write" && r.Ratio == 0.5);
     }
 
     [Fact]
@@ -77,14 +77,14 @@ public class RoleMiningTests
     {
         var userAccesses = new List<UserAccess>
         {
-            new UserAccess { UserID = "1", RoleID = "A", AccessLevelID = "Read", IsExtraAccess = false },
-            new UserAccess { UserID = "2", RoleID = "A", AccessLevelID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "3", RoleID = "B", AccessLevelID = "Read", IsExtraAccess = false },
-            new UserAccess { UserID = "4", RoleID = "B", AccessLevelID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "5", RoleID = "C", AccessLevelID = "Read", IsExtraAccess = false },
-            new UserAccess { UserID = "6", RoleID = "C", AccessLevelID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "7", RoleID = "D", AccessLevelID = "Read", IsExtraAccess = false },
-            new UserAccess { UserID = "8", RoleID = "D", AccessLevelID = "Write", IsExtraAccess = false }
+            new UserAccess { UserID = "1", RoleID = "A", AccessID = "Read", IsExtraAccess = false },
+            new UserAccess { UserID = "2", RoleID = "A", AccessID = "Write", IsExtraAccess = false },
+            new UserAccess { UserID = "3", RoleID = "B", AccessID = "Read", IsExtraAccess = false },
+            new UserAccess { UserID = "4", RoleID = "B", AccessID = "Write", IsExtraAccess = false },
+            new UserAccess { UserID = "5", RoleID = "C", AccessID = "Read", IsExtraAccess = false },
+            new UserAccess { UserID = "6", RoleID = "C", AccessID = "Write", IsExtraAccess = false },
+            new UserAccess { UserID = "7", RoleID = "D", AccessID = "Read", IsExtraAccess = false },
+            new UserAccess { UserID = "8", RoleID = "D", AccessID = "Write", IsExtraAccess = false }
         };
 
         var userInRoles = new List<UserInRole>
@@ -126,14 +126,14 @@ public class RoleMiningTests
     {
         var userAccesses = new List<UserAccess>
     {
-        new UserAccess { UserID = "1", RoleID = "A", AccessLevelID = "Read", IsExtraAccess = true },
-        new UserAccess { UserID = "2", RoleID = "A", AccessLevelID = "Write", IsExtraAccess = false },
-        new UserAccess { UserID = "3", RoleID = "B", AccessLevelID = "Read", IsExtraAccess = true },
-        new UserAccess { UserID = "4", RoleID = "B", AccessLevelID = "Write", IsExtraAccess = false },
-        new UserAccess { UserID = "5", RoleID = "C", AccessLevelID = "Read", IsExtraAccess = true },
-        new UserAccess { UserID = "6", RoleID = "C", AccessLevelID = "Write", IsExtraAccess = false },
-        new UserAccess { UserID = "7", RoleID = "D", AccessLevelID = "Read", IsExtraAccess = true },
-        new UserAccess { UserID = "8", RoleID = "D", AccessLevelID = "Write", IsExtraAccess = false }
+        new UserAccess { UserID = "1", RoleID = "A", AccessID = "Read", IsExtraAccess = true },
+        new UserAccess { UserID = "2", RoleID = "A", AccessID = "Write", IsExtraAccess = false },
+        new UserAccess { UserID = "3", RoleID = "B", AccessID = "Read", IsExtraAccess = true },
+        new UserAccess { UserID = "4", RoleID = "B", AccessID = "Write", IsExtraAccess = false },
+        new UserAccess { UserID = "5", RoleID = "C", AccessID = "Read", IsExtraAccess = true },
+        new UserAccess { UserID = "6", RoleID = "C", AccessID = "Write", IsExtraAccess = false },
+        new UserAccess { UserID = "7", RoleID = "D", AccessID = "Read", IsExtraAccess = true },
+        new UserAccess { UserID = "8", RoleID = "D", AccessID = "Write", IsExtraAccess = false }
     };
 
         var userInRoles = new List<UserInRole>
@@ -151,37 +151,9 @@ public class RoleMiningTests
         var result = RoleMining.MineRoles(userAccesses, userInRoles);
 
         Assert.Equal(4, result.Count);
-        Assert.Contains(result, r => r.Role == "A" && r.Access == "Read" && r.Ratio == 0.5);
-        Assert.Contains(result, r => r.Role == "B" && r.Access == "Read" && r.Ratio == 0.5);
-        Assert.Contains(result, r => r.Role == "C" && r.Access == "Read" && r.Ratio == 0.5);
-        Assert.Contains(result, r => r.Role == "D" && r.Access == "Read" && r.Ratio == 0.5);
+        Assert.Contains(result, r => r.RoleID == "A" && r.AccessID == "Read" && r.Ratio == 0.5);
+        Assert.Contains(result, r => r.RoleID == "B" && r.AccessID == "Read" && r.Ratio == 0.5);
+        Assert.Contains(result, r => r.RoleID == "C" && r.AccessID == "Read" && r.Ratio == 0.5);
+        Assert.Contains(result, r => r.RoleID == "D" && r.AccessID == "Read" && r.Ratio == 0.5);
     }
-
-    //[Fact]
-    //public void RecommendToBakeIntoRole_ShouldReturnCorrectRecommendations()
-    //{
-    //    var ratioAccessLevels = new List<RatioAccessLevel>
-    //    {
-    //        new RatioAccessLevel { Role = "A", Access = "Read", Ratio = 0.6, TotalUsers = 10 },
-    //        new RatioAccessLevel { Role = "A", Access = "Write", Ratio = 0.4, TotalUsers = 10 },
-    //        new RatioAccessLevel { Role = "B", Access = "Read", Ratio = 0.7, TotalUsers = 5 },
-    //        new RatioAccessLevel { Role = "B", Access = "Write", Ratio = 0.3, TotalUsers = 5 }
-    //    };
-    //
-    //    // Act
-    //    var result = RoleMining.RecommendToBakeIntoRole(ratioAccessLevels);
-    //
-    //    // Assert
-    //    Assert.Equal(2, result.Count);
-    //
-    //    var recommendationA = result.Find(r => r.Role == "A" && r.Access == "Read");
-    //    Assert.NotNull(recommendationA);
-    //    Assert.Equal(10, recommendationA.TotalUsers);
-    //    Assert.Equal(0.6, recommendationA.ratio);
-    //
-    //    var recommendationB = result.Find(r => r.Role == "B" && r.Access == "Read");
-    //    Assert.NotNull(recommendationB);
-    //    Assert.Equal(5, recommendationB.TotalUsers);
-    //    Assert.Equal(0.7, recommendationB.ratio);
-    //}
 }
