@@ -11,9 +11,9 @@ Includes the method MineRoles and some classes</PackageReleaseNotes>
     <Authors>Dany Gonzalez-Teigland</Authors>
     <Company>IdentityStream</Company>
     <Copyright>Copyright (c) 2024 IdentityStream AS</Copyright>
-    <PackageProjectUrl>https://github.com/IdentityStream/RoleMining/tree/main</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/IdentityStream/RoleMining</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/IdentityStream/RoleMining/tree/main</RepositoryUrl>
+    <RepositoryUrl>https://github.com/IdentityStream/RoleMining</RepositoryUrl>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
