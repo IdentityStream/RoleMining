@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>RoleMiner.Library</Title>
     <PackageTags>IAM;Role</PackageTags>
     <PackageReleaseNotes>First release of the RoleMining library.
@@ -13,15 +12,28 @@ Includes the method MineRoles and some classes</PackageReleaseNotes>
     <Company>IdentityStream</Company>
     <Copyright>Copyright (c) 2024 IdentityStream AS</Copyright>
     <PackageProjectUrl>https://github.com/IdentityStream/RoleMining/tree/main</PackageProjectUrl>
-    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/IdentityStream/RoleMining/tree/main</RepositoryUrl>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="ReadMe.md">
+    <None Update="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="MinVer" Version="5.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>  
 
 </Project>
