@@ -84,7 +84,7 @@ namespace RoleMining.Library
 
 
         // Function for recommending new standard accesses to a role. Done through comparing users that have extra access, and users in role
-        public static List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles, bool weighted = false)
+        public static List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
             InputValidator.CheckIfEmpty(userAccesses, nameof(userAccesses));
             InputValidator.CheckIfEmpty(userInRoles, nameof(userInRoles));
@@ -144,18 +144,30 @@ namespace RoleMining.Library
                     var union = roleToUsers.Value.Union(accessToUsers.Value).Count();            // Amount of users from role + Amount of users from access
                     var jaccardIndex = (double)intersection / union;                             // Similarity between the access and the role, high similarity = high Jaccard index
 
+                    var amountOfUsersInRole = roleToUsers.Value.Count();
+                    var amountOfUsersWithAccess = intersection;
 
-                    if (weighted)
-                    {
-                        var penalty = Math.Abs(roleToUsers.Value.Count() - intersection) / (double)Math.Max(roleToUsers.Value.Count(), intersection);
-                        jaccardIndex *= (1 - penalty);
-                    }
 
-                    jaccardIndices.Add(new Jaccard                                               // Should add weight based on how many extra ccesses this will remove, but reduce on how many new accesses it will add
+                    // Penalty for adding users that do not have the access
+                    // The penalty is calculated by taking the value of the difference between the amount of users in the role and the intersection, divided by the amount of users in the role
+                    // Example: 10 users in the role, 1 users with the access
+                    // Result: 10 - 1 / 10 = 0.9, 1-0.9 = 0.1. This means that the Jaccard index will be multiplied by 0.1
+                    var penalty = amountOfUsersInRole - intersection / (double)amountOfUsersInRole;
+
+                    // Reward based on extra accesses removed
+                    // The reward is based on how many accesses are removed
+                    // Example: Removed 10 extra accesses
+                    // 
+                    var reward = intersection;
+
+                    var weight = penalty * reward;
+
+                    jaccardIndices.Add(new Jaccard                                               
                     {
+                        JaccardIndex = jaccardIndex,
+                        WeightedJaccardIndex = jaccardIndex * weight,
                         RoleID = roleToUsers.Key,
                         AccessID = accessToUsers.Key,
-                        JaccardIndex = jaccardIndex,
                         UsersWithAccess = intersection,
                         UsersWithoutAccess = roleToUsers.Value.Count - intersection
                     });
