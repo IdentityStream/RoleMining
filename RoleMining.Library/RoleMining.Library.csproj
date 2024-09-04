@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>RoleMiner.Library</Title>
     <PackageTags>IAM;Role</PackageTags>
     <PackageReleaseNotes>First release of the RoleMining library.
@@ -11,39 +12,16 @@ Includes the method MineRoles and some classes</PackageReleaseNotes>
     <Authors>Dany Gonzalez-Teigland</Authors>
     <Company>IdentityStream</Company>
     <Copyright>Copyright (c) 2024 IdentityStream AS</Copyright>
-    <PackageProjectUrl>https://github.com/IdentityStream/RoleMining</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/IdentityStream/RoleMining</RepositoryUrl>
-	<GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<EnablePackageValidation>true</EnablePackageValidation>
-	<PackageIcon>icon.png</PackageIcon>
-	<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/IdentityStream/RoleMining/tree/main</PackageProjectUrl>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/IdentityStream/RoleMining/tree/main</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-	  <None Include="README.md" Pack="true" PackagePath="" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.4">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="MinVer" Version="5.0.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="icon.png">
+    <None Update="ReadMe.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Update="LICENSE.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>  
+  </ItemGroup>
 
 </Project>
