@@ -2,7 +2,6 @@
 namespace RoleMining.Library
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -83,6 +82,83 @@ namespace RoleMining.Library
 
 
 
+
+        // Function for recommending new standard accesses to a role. Done through comparing users that have extra access, and users in role
+        public static List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+        {
+            InputValidator.CheckIfEmpty(userAccesses, nameof(userAccesses));
+            InputValidator.CheckIfEmpty(userInRoles, nameof(userInRoles));
+
+            // Input testDataAccess and testDataUserInRole from RoleMining.Console/Program.cs
+            // Return a RatioAccessLevel object
+
+            Console.WriteLine("Mining roles...");
+
+            // Remove duplicates and tranform to set
+            var distinctUserAccesses = new HashSet<UserAccess>();
+            var distinctUserInRoles = new HashSet<UserInRole>();
+
+            foreach (var uA in userAccesses)
+            {
+                distinctUserAccesses.Add(uA);
+            }
+            foreach (var uIR in userInRoles)
+            {
+                distinctUserInRoles.Add(uIR);
+            }
+
+
+            // Create a dictionary to map RoleID to a list of UserIDs
+            var rolesToUsers = new Dictionary<string, List<string>>();
+
+            foreach (var userInRole in distinctUserInRoles)
+            {
+                if (!rolesToUsers.ContainsKey(userInRole.RoleID))
+                {
+                    rolesToUsers[userInRole.RoleID] = new List<string>();
+                }
+                rolesToUsers[userInRole.RoleID].Add(userInRole.UserID);
+            }
+
+            // Create a dictionary to map AccessID to a list of UserIDs
+            var accesssToUsers = new Dictionary<string, List<string>>();
+
+            foreach (var userAccess in distinctUserAccesses.Where(ua => ua.IsExtraAccess))
+            {
+                if (!accesssToUsers.ContainsKey(userAccess.AccessID))
+                {
+                    accesssToUsers[userAccess.AccessID] = new List<string>();
+                }
+                accesssToUsers[userAccess.AccessID].Add(userAccess.UserID);
+            }
+
+            // Create a list of Jaccard indices
+            var jaccardIndices = new List<Jaccard>();
+
+            // Calculate Jaccard index for each extra access to each role
+            foreach (var accessToUsers in accesssToUsers) // Each access as a key, with the value as a list of users
+            {
+                foreach (var roleToUsers in rolesToUsers) // Each role as a key, with the value as a list of users
+                {
+                    var intersection = roleToUsers.Value.Intersect(accessToUsers.Value).Count(); // Amount of users with the same role and same access
+                    var union = roleToUsers.Value.Union(accessToUsers.Value).Count();            // Amount of users from role + Amount of users from access
+                    var jaccardIndex = (double)intersection / union;                             // Similarity between the access and the role, high similarity = high Jaccard index
+
+                    jaccardIndices.Add(new Jaccard
+                    {
+                        RoleID = roleToUsers.Key,
+                        AccessID = accessToUsers.Key,
+                        JaccardIndex = jaccardIndex,
+                        UsersWithAccess = intersection,
+                        UsersWithoutAccess = roleToUsers.Value.Count - intersection
+                    });
+                }
+            }
+
+            return jaccardIndices;
+        }
+
+
         /// <summary>
         /// Function to remove duplicates from a dictionary based on a selector function.
         /// </summary>
@@ -91,8 +167,8 @@ namespace RoleMining.Library
         /// <param name="selector">Key, or part of key for the dictionary.</param>
         /// <returns>List of KeyValuePair with string and T.</returns>
         public static IEnumerable<KeyValuePair<string, T>> ReturnDistinct<T>(
-            IEnumerable<KeyValuePair<string, T>> source,
-            Func<T, string> selector)
+        IEnumerable<KeyValuePair<string, T>> source,
+        Func<T, string> selector)
         {
             var seen = new HashSet<string>(); // Use the type that matches the selector's return type
             var result = new List<KeyValuePair<string, T>>();
