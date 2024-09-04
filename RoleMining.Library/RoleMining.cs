@@ -156,13 +156,13 @@ namespace RoleMining.Library
 
                     // Reward based on extra accesses removed
                     // The reward is based on how many accesses are removed
-                    // Example: Removed 10 extra accesses
+                    // Need to find the way to implement this. I might use the logorithm of the amount of users with the access. So at base value i would do *10
                     // 
-                    var reward = intersection;
+                    var reward = Math.Log(intersection);
 
                     var weight = penalty * reward;
 
-                    jaccardIndices.Add(new Jaccard                                               
+                    jaccardIndices.Add(new Jaccard
                     {
                         JaccardIndex = jaccardIndex,
                         WeightedJaccardIndex = jaccardIndex * weight,
