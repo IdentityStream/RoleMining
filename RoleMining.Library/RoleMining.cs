@@ -82,24 +82,20 @@ namespace RoleMining.Library
         }
 
 
-        // Function using Jaccard index to compare users with extra access to users in role
-
-
-
-
 
         /// <summary>
-        /// Helper function to return distinct values from a dictionary containing <seealso cref="UserAccess"></seealso> objects using specific selector.
+        /// Function to remove duplicates from a dictionary based on a selector function.
         /// </summary>
-        /// <param name="source">Dictionary with <seealso cref="UserAccess">UserAccess</seealso> objects.</param>
-        /// <param name="selector">The parameter that should be distinct. This is the key in this instance.</param>
-        /// <returns></returns>
-        private static IEnumerable<KeyValuePair<string, UserAccess>> ReturnDistinct( // This can be done using LINQ functions; .groupby and .select(g => g.first)
-            IEnumerable<KeyValuePair<string, UserAccess>> source,
-            Func<UserAccess, string> selector)
+        /// <typeparam name="T">Arbitary object.</typeparam>
+        /// <param name="source">Dictionary with values of type T</param>
+        /// <param name="selector">Key, or part of key for the dictionary.</param>
+        /// <returns>List of KeyValuePair with string and T.</returns>
+        public static IEnumerable<KeyValuePair<string, T>> ReturnDistinct<T>(
+            IEnumerable<KeyValuePair<string, T>> source,
+            Func<T, string> selector)
         {
             var seen = new HashSet<string>(); // Use the type that matches the selector's return type
-            var result = new List<KeyValuePair<string, UserAccess>>();
+            var result = new List<KeyValuePair<string, T>>();
 
             foreach (var kvp in source)
             {
