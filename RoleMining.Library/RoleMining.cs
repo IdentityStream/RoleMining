@@ -6,7 +6,9 @@ namespace RoleMining.Library
     using System.Collections.Generic;
     using System.Linq;
 
-
+    /// <summary>
+    /// Main class for RoleMining.Library. Contains the method to mine roles.
+    /// </summary>
     public class RoleMining
     {
         /// <summary>
@@ -40,11 +42,11 @@ namespace RoleMining.Library
 
 
             // Convert to dictionaries
-            var userAccessDict = distinctUserAccesses.ToDictionary(uA => $"{uA.UserID} - {uA.RoleID} - {uA.AccessLevelID}"); // Create a dictionary of user accesses
+            var userAccessDict = distinctUserAccesses.ToDictionary(uA => $"{uA.UserID} - {uA.RoleID} - {uA.AccessID}"); // Create a dictionary of user accesses
             var userInRoleDict = distinctUserInRoles.ToDictionary(uIR => $"{uIR.UserID} - {uIR.RoleID}"); // Create a dictionary of user in roles
 
             var specialAccesses = userAccessDict.Where(uA => uA.Value.IsExtraAccess); // Finding all extra accesses
-            var distinctSpecialAccesses = ReturnDistinct(specialAccesses, uA => $"{uA.RoleID} - {uA.AccessLevelID}"); // Finding distinct extra accesses (Hopefully)
+            var distinctSpecialAccesses = ReturnDistinct(specialAccesses, uA => $"{uA.RoleID} - {uA.AccessID}"); // Finding distinct extra accesses (Hopefully)
             // DistinctSpecialAccesses does only check for distinct accesses, not accesses per role. This means that if you have two different roles with the
             // same accesses, the last one will dissappear 
             // Hopefully this will not turn into another bug, trying out with adding the RoleID to the selector
@@ -53,7 +55,7 @@ namespace RoleMining.Library
             var roleSummaries = userInRoleDict.GroupBy(uIR => uIR.Value.RoleID)
                 .Select(group => new UserRoleSummary
                 {
-                    Role = group.Key,
+                    RoleID = group.Key,
                     TotalUsers = group.Count()
                 }).ToList();
 
@@ -61,15 +63,15 @@ namespace RoleMining.Library
             // Create the ratio per access level for all distinct special accesses
             var ratioList = distinctSpecialAccesses.Select(distinctSpecialAccess =>
             {
-                var usersWithAccessAsExtra = specialAccesses.Count(uA => uA.Value.AccessLevelID == distinctSpecialAccess.Value.AccessLevelID && uA.Value.RoleID == distinctSpecialAccess.Value.RoleID);
+                var usersWithAccessAsExtra = specialAccesses.Count(uA => uA.Value.AccessID == distinctSpecialAccess.Value.AccessID && uA.Value.RoleID == distinctSpecialAccess.Value.RoleID);
                 var typeRole = distinctSpecialAccess.Value.RoleID;
 
-                var roleSummary = roleSummaries.FirstOrDefault(role => role.Role == $"{distinctSpecialAccess.Value.RoleID}");
+                var roleSummary = roleSummaries.FirstOrDefault(role => role.RoleID == $"{distinctSpecialAccess.Value.RoleID}");
 
                 return new RatioAccessLevel
                 {
-                    Role = typeRole,
-                    Access = distinctSpecialAccess.Value.AccessLevelID,
+                    RoleID = typeRole,
+                    AccessID = distinctSpecialAccess.Value.AccessID,
                     Ratio = roleSummary != null ? (double)usersWithAccessAsExtra / roleSummary.TotalUsers : 1,
                     UsersWithAccessAsExtra = usersWithAccessAsExtra,
                     TotalUsers = roleSummary != null ? roleSummary.TotalUsers : 1
@@ -81,12 +83,19 @@ namespace RoleMining.Library
 
 
 
-            public static IEnumerable<KeyValuePair<string, UserAccess>> ReturnDistinct(
-            IEnumerable<KeyValuePair<string, UserAccess>> source,
-            Func<UserAccess, string> selector)
+        /// <summary>
+        /// Function to remove duplicates from a dictionary based on a selector function.
+        /// </summary>
+        /// <typeparam name="T">Arbitary object.</typeparam>
+        /// <param name="source">Dictionary with values of type T</param>
+        /// <param name="selector">Key, or part of key for the dictionary.</param>
+        /// <returns>List of KeyValuePair with string and T.</returns>
+        public static IEnumerable<KeyValuePair<string, T>> ReturnDistinct<T>(
+            IEnumerable<KeyValuePair<string, T>> source,
+            Func<T, string> selector)
         {
             var seen = new HashSet<string>(); // Use the type that matches the selector's return type
-            var result = new List<KeyValuePair<string, UserAccess>>();
+            var result = new List<KeyValuePair<string, T>>();
 
             foreach (var kvp in source)
             {
