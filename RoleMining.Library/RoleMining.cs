@@ -84,7 +84,7 @@ namespace RoleMining.Library
 
 
         // Function for recommending new standard accesses to a role. Done through comparing users that have extra access, and users in role
-        public static List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+        public static List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles, bool weighted = false)
         {
             InputValidator.CheckIfEmpty(userAccesses, nameof(userAccesses));
             InputValidator.CheckIfEmpty(userInRoles, nameof(userInRoles));
@@ -144,7 +144,14 @@ namespace RoleMining.Library
                     var union = roleToUsers.Value.Union(accessToUsers.Value).Count();            // Amount of users from role + Amount of users from access
                     var jaccardIndex = (double)intersection / union;                             // Similarity between the access and the role, high similarity = high Jaccard index
 
-                    jaccardIndices.Add(new Jaccard
+
+                    if (weighted)
+                    {
+                        var penalty = Math.Abs(roleToUsers.Value.Count() - intersection) / (double)Math.Max(roleToUsers.Value.Count(), intersection);
+                        jaccardIndex *= (1 - penalty);
+                    }
+
+                    jaccardIndices.Add(new Jaccard                                               // Should add weight based on how many extra ccesses this will remove, but reduce on how many new accesses it will add
                     {
                         RoleID = roleToUsers.Key,
                         AccessID = accessToUsers.Key,
