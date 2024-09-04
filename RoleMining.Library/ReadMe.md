@@ -14,13 +14,13 @@ A C# library for mining roles based on extra access lists.
 	// Return type is RatioAccessLevel
 ```
 
-Types
+Classes
 ```csharp
     public class UserAccess
 	{
 		public string UserID { get; set; }
 		public string RoleID { get; set; }
-		public string AccessLevelID { get; set; }
+		public string AccessID { get; set; }
 		public bool IsExtraAccess { get; set; }
 	}
 
@@ -32,8 +32,8 @@ Types
 	
     public class RatioAccessLevel
 	{
-		public string Role { get; set; }
-		public string Access { get; set; }
+		public string RoleID { get; set; }
+		public string AccessID { get; set; }
 		public double Ratio { get; set; }
 		public int UsersWithAccessAsExtra { get; set; }
 		public int TotalUsers { get; set; }
