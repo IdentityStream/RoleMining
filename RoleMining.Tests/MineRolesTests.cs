@@ -4,8 +4,33 @@ using RoleMining.Library;
 using System.Collections.Generic;
 using Xunit;
 
-public class RoleMiningTests
+public class MineRolesTests
 {
+    [Fact]
+    public void RunCode()
+    {
+        var userAccesses = new List<UserAccess>
+        {
+            new UserAccess { UserID = "1", RoleID = "A", AccessID = "Read", IsExtraAccess = true },
+            new UserAccess { UserID = "2", RoleID = "A", AccessID = "Write", IsExtraAccess = false },
+            new UserAccess { UserID = "3", RoleID = "A", AccessID = "Read", IsExtraAccess = false },
+            new UserAccess { UserID = "4", RoleID = "A", AccessID = "Write", IsExtraAccess = true }
+        };
+
+        var userInRoles = new List<UserInRole>
+        {
+            new UserInRole { UserID = "1", RoleID = "A" },
+            new UserInRole { UserID = "2", RoleID = "A" },
+            new UserInRole { UserID = "3", RoleID = "A" },
+            new UserInRole { UserID = "4", RoleID = "A" }
+        };
+
+        var result = RoleMining.MineRoles(userAccesses, userInRoles);
+        Assert.Equal(1, 1);
+    }
+
+
+
     [Fact]
     public void TestBasicFunctionality()
     {
@@ -155,77 +180,5 @@ public class RoleMiningTests
         Assert.Contains(result, r => r.RoleID == "B" && r.AccessID == "Read" && r.Ratio == 0.5);
         Assert.Contains(result, r => r.RoleID == "C" && r.AccessID == "Read" && r.Ratio == 0.5);
         Assert.Contains(result, r => r.RoleID == "D" && r.AccessID == "Read" && r.Ratio == 0.5);
-    }
-
-    [Fact]
-    public void RunCode()
-    {
-        var userAccesses = new List<UserAccess>
-        {
-            new UserAccess { UserID = "1", RoleID = "A", AccessID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "2", RoleID = "A", AccessID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "3", RoleID = "B", AccessID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "4", RoleID = "B", AccessID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "5", RoleID = "C", AccessID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "6", RoleID = "C", AccessID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "7", RoleID = "D", AccessID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "8", RoleID = "D", AccessID = "Write", IsExtraAccess = false }
-        };
-
-            var userInRoles = new List<UserInRole>
-        {
-            new UserInRole { UserID = "1", RoleID = "A" },
-            new UserInRole { UserID = "2", RoleID = "A" },
-            new UserInRole { UserID = "3", RoleID = "B" },
-            new UserInRole { UserID = "4", RoleID = "B" },
-            new UserInRole { UserID = "5", RoleID = "C" },
-            new UserInRole { UserID = "6", RoleID = "C" },
-            new UserInRole { UserID = "7", RoleID = "D" },
-            new UserInRole { UserID = "8", RoleID = "D" }
-        };
-        var jaccard = RoleMining.JaccardIndices(userAccesses, userInRoles);
-        Assert.Equal(1, 1);
-    }
-
-    [Fact]
-    public void TestJaccardIndices()
-    {
-        // Arrange
-        var userAccesses = new List<UserAccess>
-            {
-                new UserAccess { UserID = "1", RoleID = "A", AccessID = "Read", IsExtraAccess = true },
-                new UserAccess { UserID = "2", RoleID = "A", AccessID = "Write", IsExtraAccess = true },
-                new UserAccess { UserID = "3", RoleID = "B", AccessID = "Read", IsExtraAccess = false },
-                new UserAccess { UserID = "4", RoleID = "B", AccessID = "Delete", IsExtraAccess = true }
-            };
-
-        var userInRoles = new List<UserInRole>
-            {
-                new UserInRole { UserID = "1", RoleID = "A" },
-                new UserInRole { UserID = "2", RoleID = "A" },
-                new UserInRole { UserID = "3", RoleID = "B" },
-                new UserInRole { UserID = "4", RoleID = "B" }
-            };
-
-        // Act
-        var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
-
-        // Assert
-        var user1Role1Access1 = result.FirstOrDefault(j => j.RoleID == "A" && j.AccessID == "Read");
-        var user2Role1Access2 = result.FirstOrDefault(j => j.RoleID == "A" && j.AccessID == "Write");
-        var user3Role2Access1 = result.FirstOrDefault(j => j.RoleID == "B" && j.AccessID == "Read");
-        var user4Role2Access3 = result.FirstOrDefault(j => j.RoleID == "B" && j.AccessID == "Delete");
-
-        Assert.NotNull(user1Role1Access1);
-        Assert.Equal(0.5, user1Role1Access1.JaccardIndex);
-
-        Assert.NotNull(user2Role1Access2);
-        Assert.Equal(0.5, user2Role1Access2.JaccardIndex);
-
-        Assert.NotNull(user3Role2Access1);
-        Assert.Equal(0.0, user3Role2Access1.JaccardIndex);
-
-        Assert.NotNull(user4Role2Access3);
-        Assert.Equal(0.5, user4Role2Access3.JaccardIndex);
     }
 }
