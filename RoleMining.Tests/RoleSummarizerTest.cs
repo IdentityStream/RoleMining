@@ -25,7 +25,7 @@ public class RoleSummarizerTest : IAlgorithmTest
             new UserInRole { UserID = "4", RoleID = "A" }
         };
 
-        var result = RoleMining.MineRoles(userAccesses, userInRoles);
+        var result = RoleMining.SummarizeRoles(userAccesses, userInRoles);
         Assert.Equal(1, 1);
     }
 
@@ -35,10 +35,10 @@ public class RoleSummarizerTest : IAlgorithmTest
         var userAccesses = new List<UserAccess>();
         var userInRoles = new List<UserInRole>();
 
-        var exception1 = Assert.Throws<ArgumentException>(() => RoleMining.MineRoles(userAccesses, userInRoles));
+        var exception1 = Assert.Throws<ArgumentException>(() => RoleMining.SummarizeRoles(userAccesses, userInRoles));
         Assert.Equal("userAccesses", exception1.ParamName);
 
-        var exception2 = Assert.Throws<ArgumentNullException>(() => RoleMining.MineRoles(null, null));
+        var exception2 = Assert.Throws<ArgumentNullException>(() => RoleMining.SummarizeRoles(null, null));
         Assert.Equal("userAccesses", exception2.ParamName);
     }
 
@@ -59,7 +59,7 @@ public class RoleSummarizerTest : IAlgorithmTest
             new UserInRole { UserID = "4", RoleID = "A" }
         };
 
-        var result = RoleMining.MineRoles(userAccesses, userInRoles);
+        var result = RoleMining.SummarizeRoles(userAccesses, userInRoles);
 
         Assert.Equal(2, result.Count);
         Assert.Contains(result, r => r.RoleID == "A" && r.AccessID == "Read" && r.Ratio == 0.25);
@@ -102,7 +102,7 @@ public class RoleSummarizerTest : IAlgorithmTest
             new UserInRole { UserID = "6", RoleID = "User" }
         };
 
-        var result = RoleMining.MineRoles(userAccesses, userInRoles);
+        var result = RoleMining.SummarizeRoles(userAccesses, userInRoles);
         // We want Role A with Read and Write
         // We want Role B with Read and Write
 
@@ -133,7 +133,7 @@ public class RoleSummarizerTest : IAlgorithmTest
         }
 
         // Run the role mining algorithm on this large dataset
-        var result = RoleMining.MineRoles(userAccesses, userInRoles);
+        var result = RoleMining.SummarizeRoles(userAccesses, userInRoles);
 
         // Expecting 2 role - extra access relations (Only two roles, and one extra access: 2x1)
         Assert.Equal(2, result.Count);
@@ -171,7 +171,7 @@ public class RoleSummarizerTest : IAlgorithmTest
         new UserInRole { UserID = "8", RoleID = "D" }
     };
 
-        var result = RoleMining.MineRoles(userAccesses, userInRoles);
+        var result = RoleMining.SummarizeRoles(userAccesses, userInRoles);
 
         Assert.Equal(4, result.Count);
         Assert.Contains(result, r => r.RoleID == "A" && r.AccessID == "Read" && r.Ratio == 0.5);

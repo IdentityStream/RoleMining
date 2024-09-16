@@ -11,14 +11,14 @@ A C# library for mining roles from a RBAC system. The library aims to provide di
 ## Syntax
 **MineRoles**
 ```csharp
-	RoleMining.MineRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
-	// Return type is RatioAccessLevel
+	RoleMining.SummarizeRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+	// Return type is AccessInRoleSummarized
 ```
 
 **JaccardIndices**
 ```csharp
 	RoleMining.JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
-	// Return type is JaccardIndex
+	// Return type is Jaccard
 ```
 
 Types
@@ -26,9 +26,7 @@ Types
     public class UserAccess
 	{
 		public string UserID { get; set; }
-		public string RoleID { get; set; }
 		public string AccessLevelID { get; set; }
-		public bool IsExtraAccess { get; set; }
 	}
 
     public class UserInRole
@@ -37,7 +35,7 @@ Types
 		public string UserID { get; set; }
 	}
 	
-    public class RatioAccessLevel
+    public class AccessInRoleSummarized
 	{
 		public string Role { get; set; }
 		public string Access { get; set; }

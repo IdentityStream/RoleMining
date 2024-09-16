@@ -3,7 +3,7 @@
     /// <summary>
     /// Object used to store the ratio of extra accesses by each role compared to how many there are in that role.
     /// 
-    /// The type in the list returned from <seealso cref="RoleMining.MineRoles">RoleMining.MineRoles</seealso> method
+    /// The type in the list returned from <seealso cref="RoleMining.SummarizeRoles">RoleMining.MineRoles</seealso> method
     /// </summary>
     public class AccessInRoleSummarized
     {

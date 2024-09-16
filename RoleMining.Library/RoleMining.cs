@@ -17,9 +17,9 @@ namespace RoleMining.Library
         /// <param name="userAccesses">A IEnumerable of <seealso cref="UserAccess">UserAccess</seealso> objects</param>
         /// <param name="userInRoles"></param>
         /// <returns></returns>
-        public static List<AccessInRoleSummarized> MineRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+        public static List<AccessInRoleSummarized> SummarizeRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
-            return RoleSummarizer.SummariseRoles(userAccesses, userInRoles);
+            return RoleSummarizer.SummarizeRoles(userAccesses, userInRoles);
         }
 
         /// <summary>

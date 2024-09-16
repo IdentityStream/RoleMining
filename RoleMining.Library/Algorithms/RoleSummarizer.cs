@@ -16,7 +16,7 @@ namespace RoleMining.Library.Algorithms
         /// <param name="userAccesses">A IEnumerable of <seealso cref="UserAccess">UserAccess</seealso> objects</param>
         /// <param name="userInRoles"></param>
         /// <returns></returns>
-        public static List<AccessInRoleSummarized> SummariseRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+        public static List<AccessInRoleSummarized> SummarizeRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
             InputValidator.CheckIfEmpty(userAccesses, nameof(userAccesses));
             InputValidator.CheckIfEmpty(userInRoles, nameof(userInRoles));
