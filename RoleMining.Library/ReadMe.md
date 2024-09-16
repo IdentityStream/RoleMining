@@ -21,12 +21,14 @@ A C# library for mining roles from a RBAC system. The library aims to provide di
 	// Return type is Jaccard
 ```
 
-Types
+Classes
 ```csharp
     public class UserAccess
 	{
 		public string UserID { get; set; }
 		public string AccessLevelID { get; set; }
+		public string AccessID { get; set; }
+
 	}
 
     public class UserInRole
@@ -37,8 +39,8 @@ Types
 	
     public class AccessInRoleSummarized
 	{
-		public string Role { get; set; }
-		public string Access { get; set; }
+		public string RoleID { get; set; }
+		public string AccessID { get; set; }
 		public double Ratio { get; set; }
 		public int UsersWithAccessAsExtra { get; set; }
 		public int TotalUsers { get; set; }
