@@ -1,9 +1,9 @@
 ﻿namespace RoleMining.Library.Classes
 {
     /// <summary>
-    /// Combination of a user and a role
+    /// Class that represents the relationship between a role and its standard access.
     /// </summary>
-    public class UserInRole
+    public class AccessInRole
     {
         /// <summary>
         /// The role ID, unique identifier for each role.
@@ -11,32 +11,32 @@
         public string RoleID { get; set; }
 
         /// <summary>
-        /// Unique identifier for each user.
+        /// The access level, something that is unique to each access and access level. Example: access: "Github", access level: "Admin". The access parameter would then be "Github - Admin".
         /// </summary>
-        public string UserID { get; set; }
+        public string AccessID { get; set; }
 
 
         // FUNCTIONS USED BY HASHSET TO COMPARE OBJECTS
 
         /// <summary>
-        /// Function to return the hash code for the UserInRole object, combination of UserID and RoleID.
+        /// Returns the hash code for the UserAccess object, combination of UserID, RoleID and AccessID.
         /// </summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            return $"{UserID} - {RoleID}".GetHashCode();
+            return $"{RoleID} - {AccessID}".GetHashCode();
         }
 
         /// <summary>
-        /// Function to check if this UserInRole object is equal to another object.
+        /// Function to check if this UserAccess object is equal to another object.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj is UserInRole other)
+            if (obj is AccessInRole other)
             {
-                return RoleID == other.RoleID && UserID == other.UserID;
+                return RoleID == other.RoleID && AccessID == other.AccessID;
             }
             return false;
         }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RoleMining.Library
+namespace RoleMining.Library.Classes
 {
     internal class InputValidator
     {

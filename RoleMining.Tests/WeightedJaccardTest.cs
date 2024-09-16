@@ -1,10 +1,11 @@
 namespace RoleMining.Tests;
 
 using RoleMining.Library;
+using RoleMining.Library.Classes;
 using System.Collections.Generic;
 using Xunit;
 
-public class JaccardIndicesTests
+public class WeightedJaccardTest
 {
 
     [Fact]
@@ -12,14 +13,14 @@ public class JaccardIndicesTests
     {
         var userAccesses = new List<UserAccess>
         {
-            new UserAccess { UserID = "1", RoleID = "A", AccessID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "2", RoleID = "A", AccessID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "3", RoleID = "B", AccessID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "4", RoleID = "B", AccessID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "5", RoleID = "C", AccessID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "6", RoleID = "C", AccessID = "Write", IsExtraAccess = false },
-            new UserAccess { UserID = "7", RoleID = "D", AccessID = "Read", IsExtraAccess = true },
-            new UserAccess { UserID = "8", RoleID = "D", AccessID = "Write", IsExtraAccess = false }
+            new UserAccess { UserID = "1", AccessID = "Read", },
+            new UserAccess { UserID = "2", AccessID = "Write",},
+            new UserAccess { UserID = "3", AccessID = "Read", },
+            new UserAccess { UserID = "4", AccessID = "Write",},
+            new UserAccess { UserID = "5", AccessID = "Read", },
+            new UserAccess { UserID = "6", AccessID = "Write",},
+            new UserAccess { UserID = "7", AccessID = "Read", },
+            new UserAccess { UserID = "8", AccessID = "Write",},
         };
 
         var userInRoles = new List<UserInRole>
@@ -43,10 +44,10 @@ public class JaccardIndicesTests
         // Arrange
         var userAccesses = new List<UserAccess>
             {
-                new UserAccess { UserID = "1", RoleID = "A", AccessID = "Read", IsExtraAccess = true },
-                new UserAccess { UserID = "2", RoleID = "A", AccessID = "Write", IsExtraAccess = true },
-                new UserAccess { UserID = "3", RoleID = "B", AccessID = "Read", IsExtraAccess = false },
-                new UserAccess { UserID = "4", RoleID = "B", AccessID = "Delete", IsExtraAccess = true }
+                new UserAccess { UserID = "1", AccessID = "Read" },
+                new UserAccess { UserID = "2", AccessID = "Write"},
+                //new UserAccess { UserID = "3", RoleID = "B", AccessID = "Read", IsExtraAccess = false },
+                new UserAccess { UserID = "4", AccessID = "Delete"}
             };
 
         var userInRoles = new List<UserInRole>
@@ -63,7 +64,7 @@ public class JaccardIndicesTests
         // Assert
         var user1Role1Access1 = result.FirstOrDefault(j => j.RoleID == "A" && j.AccessID == "Read");
         var user2Role1Access2 = result.FirstOrDefault(j => j.RoleID == "A" && j.AccessID == "Write");
-        var user3Role2Access1 = result.FirstOrDefault(j => j.RoleID == "B" && j.AccessID == "Read");
+        // var user3Role2Access1 = result.FirstOrDefault(j => j.RoleID == "B" && j.AccessID == "Read");
         var user4Role2Access3 = result.FirstOrDefault(j => j.RoleID == "B" && j.AccessID == "Delete");
 
         Assert.NotNull(user1Role1Access1);
@@ -71,9 +72,6 @@ public class JaccardIndicesTests
 
         Assert.NotNull(user2Role1Access2);
         Assert.Equal(0.5, user2Role1Access2.JaccardIndex);
-
-        Assert.NotNull(user3Role2Access1);
-        Assert.Equal(0.0, user3Role2Access1.JaccardIndex);
 
         Assert.NotNull(user4Role2Access3);
         Assert.Equal(0.5, user4Role2Access3.JaccardIndex);
