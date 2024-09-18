@@ -99,7 +99,7 @@ namespace RoleMining.Library.Algorithms
                     });
                 }
             }
-            return jaccardIndices;
+            return jaccardIndices.OrderByDescending(j => j.JaccardIndex).ThenByDescending(j => j.UsersWithAccessAndRole).ToList();
         }
     }
 }
