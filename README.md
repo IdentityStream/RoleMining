@@ -46,13 +46,13 @@ Types
 		public int TotalUsers { get; set; }
 	}
 
-	public class JaccardIndex
+    public class JaccardIndex
 	{
-        public double JaccardIndex { get; set; }
-        public double WeightedJaccardIndex { get; set; }
-        public string RoleID { get; set; }
-        public string AccessID { get; set; }
-        public int UsersWithAccess { get; set; }
-        public int UsersWithoutAccess { get; set; }
+		public double JaccardIndex { get; set; }
+	        public double WeightedJaccardIndex { get; set; }
+	        public string RoleID { get; set; }
+	        public string AccessID { get; set; }
+	        public int UsersWithAccess { get; set; }
+	        public int UsersWithoutAccess { get; set; }
 	}
 ```
