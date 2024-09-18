@@ -1,5 +1,6 @@
 ﻿namespace RoleMining.Tests;
 
+using FluentAssertions;
 using RoleMining.Library;
 using RoleMining.Library.Classes;
 using System.Collections.Generic;
@@ -53,10 +54,11 @@ public class JaccardTest : IAlgorithmTest
         };
 
         // Act
-        Assert.Throws<ArgumentNullException>(() => RoleMining.JaccardIndices(null, null));
-        Assert.Throws<ArgumentNullException>(() => RoleMining.JaccardIndices(userAccesses, null));
-        Assert.Throws<ArgumentNullException>(() => RoleMining.JaccardIndices(null, userInRoles));
-        Assert.Throws<ArgumentException>(() => RoleMining.JaccardIndices(userAccesses, userInRoles)); 
+
+        FluentActions.Invoking(() => RoleMining.JaccardIndices(null, null)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => RoleMining.JaccardIndices(userAccesses, null)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => RoleMining.JaccardIndices(null, userInRoles)).Should().Throw<ArgumentNullException>();
+        FluentActions.Invoking(() => RoleMining.JaccardIndices(userAccesses, userInRoles)).Should().Throw<ArgumentException>();
     }
 
     [Fact]
@@ -78,9 +80,13 @@ public class JaccardTest : IAlgorithmTest
 
         var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
 
-        Assert.Equal(2, result.Count);
-        Assert.Contains(result, r => r.RoleID == "A" && r.AccessID == "Read" && r.JaccardIndex == 0.25);
-        Assert.Contains(result, r => r.RoleID == "A" && r.AccessID == "Write" && r.JaccardIndex == 0.25);
+        result.Should()
+            .HaveCount(2)
+            .And
+            .Contain(result => result.RoleID == "A" && result.AccessID == "Read" && result.JaccardIndex == 0.25)
+            .And
+            .Contain(result => result.RoleID == "A" && result.AccessID == "Write" && result.JaccardIndex == 0.25)
+            ;
     }
 
     [Fact]
@@ -104,7 +110,7 @@ public class JaccardTest : IAlgorithmTest
         }
 
         var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
-        Assert.Equal(1, 1);  // Expecting 1 role with 10,000 users
+        result.Should().HaveCount(iterations);
     }
 
     [Fact]
@@ -126,8 +132,9 @@ public class JaccardTest : IAlgorithmTest
             new UserInRole { UserID = "7", RoleID = "A" },
 
         };
-        var jaccard = RoleMining.JaccardIndices(userAccesses, userInRoles);
-        Assert.Equal(1, 1);
+        var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
+        result.Should().HaveCount(1);
+        result[0].JaccardIndex.Should().Be(1.0);
     }
 
     [Fact]
@@ -153,7 +160,7 @@ public class JaccardTest : IAlgorithmTest
         }
 
         var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
-        Assert.Equal(1, 1);
+        result.Should().OnlyHaveUniqueItems();
     }
 
     [Fact]
@@ -209,16 +216,11 @@ public class JaccardTest : IAlgorithmTest
         var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
 
         // Assert
-        var RoleAAccess = result.FirstOrDefault(j => j.RoleID == "A" && j.AccessID == "Read");
-        var RoleBAccess = result.FirstOrDefault(j => j.RoleID == "B" && j.AccessID == "Read");
-
-        Assert.NotNull(RoleAAccess);
-        Assert.Equal(0.5, RoleAAccess.JaccardIndex);
-        // (9 users in role - 5 with access and role + 6 with access) / (5 with acess)
-
-        Assert.NotNull(RoleBAccess);
-        Assert.Equal(0.25, RoleBAccess.JaccardIndex);
-        // (14 users in role - 4 with access and role + 6 with access) / (4 with acess)
+        result.Should()
+            .HaveCount(2)
+            .And
+            .Contain(r => r.RoleID == "A" && r.AccessID == "Read" && r.JaccardIndex == 0.5)
+            .And
+            .Contain(r => r.RoleID == "B" && r.AccessID == "Read" && r.JaccardIndex == 0.25);
     }
-
 }
