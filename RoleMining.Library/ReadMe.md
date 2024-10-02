@@ -16,31 +16,31 @@ As the library is still under development, additional features and enhancements 
 ## Syntax
 **JaccardIndices**
 ```csharp
-	RoleMining.JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
-	// Return type is Jaccard
+    RoleMining.JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+    // Return type is Jaccard
 ```
 
 Classes
 ```csharp
-	public class UserAccess
-	{
-		public string UserID { get; set; }
-		public string AccessLevelID { get; set; }
-		public string AccessID { get; set; }
-	}
-
-	public class UserInRole
-	{
-		public string RoleID { get; set; }
-		public string UserID { get; set; }
-	}
-
-	public class JaccardIndex
-	{
-		public double JaccardIndex { get; set; }
-		public string RoleID { get; set; }
-		public string AccessID { get; set; }
-		public int UsersWithAccess { get; set; }
-		public int UsersWithoutAccess { get; set; }
-	}
+    public class UserAccess
+    {
+        public string UserID { get; set; }
+        public string AccessLevelID { get; set; }
+        public string AccessID { get; set; }
+    }
+    
+    public class UserInRole
+    {
+        public string RoleID { get; set; }
+        public string UserID { get; set; }
+    }
+    
+    public class JaccardIndex
+    {
+        public double JaccardIndex { get; set; }
+        public string RoleID { get; set; }
+        public string AccessID { get; set; }
+        public int UsersWithAccess { get; set; }
+        public int UsersWithoutAccess { get; set; }
+    }
 ```
