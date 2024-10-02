@@ -14,12 +14,6 @@ As the library is still under development, additional features and enhancements 
 - **UserAccess** and **UserInRole** classes for input.
 
 ## Syntax
-**MineRoles**
-```csharp
-	RoleMining.SummarizeRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
-	// Return type is AccessInRoleSummarized
-```
-
 **JaccardIndices**
 ```csharp
 	RoleMining.JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
