@@ -4,12 +4,17 @@ namespace RoleMining.Library.Classes
     /// <summary>
     /// Return object for the <seealso cref="JaccardIndex.JaccardIndices"/> and <seealso cref="WeightedJaccardIndex.JaccardIndices"/>
     /// </summary>
-    public class Jaccard
+    public class WeightedJaccard
     {
         /// <summary>
         /// Jacard Index of the access to role
         /// </summary>
         public double JaccardIndex { get; set; }
+
+        /// <summary>
+        /// Weighted Jaccard Index of the access to role
+        /// </summary>
+        public double WeightedJaccardIndex { get; set; }
 
         /// <summary>
         /// The role ID, unique identifier for each role.

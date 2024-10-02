@@ -14,8 +14,8 @@ namespace RoleMining.Library
         /// <summary>
         /// Mines roles based on user accesses and users in roles
         /// </summary>
-        /// <param name="userAccesses">A IEnumerable of <seealso cref="UserAccess">UserAccess</seealso> objects</param>
-        /// <param name="userInRoles"></param>
+        /// <param name="userAccesses">A IEnumerable of <see cref="UserAccess"/>, where all accesses are extra accesses</param>
+        /// <param name="userInRoles">A IEnumerable of <see cref="UserInRole"/></param>
         /// <returns></returns>
         public static List<AccessInRoleSummarized> SummarizeRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
@@ -23,28 +23,14 @@ namespace RoleMining.Library
         }
 
         /// <summary>
-        /// Finding the Jaccard Index of extra accesses to roles. A high Jaccard index means that the access is similar to the role. 
-        /// (E.g. 1.0 means the extra access is exclusive to role and all of the users in the role has the access)
+        /// Finding the Jaccard Index of extra accesses to roles. A high Jaccard index means that the access fits the role.
         /// </summary>
-        /// <param name="userAccesses">List of users and their accesses</param>
-        /// <param name="userInRoles">List of users and their roles</param>
+        /// <param name="userAccesses">A IEnumerable of <see cref="UserAccess"/>, where all accesses are extra accesses</param>
+        /// <param name="userInRoles">A IEnumerable of <see cref="UserInRole"/></param>
         /// <returns></returns>
         public static List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
             return JaccardIndex.JaccardIndices(userAccesses, userInRoles);
         }
-
-        /// <summary>
-        /// Finding the weight based on amount of users with and without access in role
-        /// </summary>
-        /// <param name="amountOfUsersInRole"></param>
-        /// <param name="amountOfUsersWithAccess"></param>
-        /// <returns></returns>
-        public static double CalculateJaccardWeight(int amountOfUsersInRole, int amountOfUsersWithAccess)
-        {
-            return WeightedJaccardIndex.CalculateJaccardWeight(amountOfUsersInRole, amountOfUsersWithAccess);
-        }
-
-
     }
 }

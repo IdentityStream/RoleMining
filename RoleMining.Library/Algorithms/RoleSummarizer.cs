@@ -1,4 +1,6 @@
-﻿using RoleMining.Library.Classes;
+﻿using FluentValidation.Results;
+using FluentValidation;
+using RoleMining.Library.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +13,15 @@ namespace RoleMining.Library.Algorithms
     public class RoleSummarizer
     {
         /// <summary>
-        /// Summarize roles and accesses based on user accesses and users in roles. Slow on big datasets...
+        /// Summarize roles and accesses based on user accesses and users in roles.
         /// </summary>
-        /// <param name="userAccesses">A IEnumerable of <seealso cref="UserAccess">UserAccess</seealso> objects</param>
-        /// <param name="userInRoles"></param>
+        /// <param name="userAccesses">A IEnumerable of <see cref="UserAccess"/> objects</param>
+        /// <param name="userInRoles">A IEnumerable of <see cref="UserInRole"/> objects</param>
         /// <returns></returns>
         public static List<AccessInRoleSummarized> SummarizeRoles(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
-            InputValidator.CheckIfEmpty(userAccesses, nameof(userAccesses));
-            InputValidator.CheckIfEmpty(userInRoles, nameof(userInRoles));
+            InputValidator.Validate(userAccesses, nameof(userAccesses));
+            InputValidator.Validate(userInRoles, nameof(userInRoles));
 
             // Remove duplicates and tranform to set
             var distinctUserAccesses = new HashSet<UserAccess>();

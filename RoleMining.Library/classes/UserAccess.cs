@@ -4,7 +4,6 @@ namespace RoleMining.Library.Classes
     /// UserAccess object
     /// </summary>
     public class UserAccess
-        // TODO, change class to take in only UserID and AccessID. This Access should be extra.
 	{
         /// <summary>
         /// Unique identifier for each user.

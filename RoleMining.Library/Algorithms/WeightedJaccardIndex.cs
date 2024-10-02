@@ -1,4 +1,6 @@
-﻿using RoleMining.Library.Classes;
+﻿using FluentValidation.Results;
+using FluentValidation;
+using RoleMining.Library.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +18,23 @@ namespace RoleMining.Library.Algorithms
         /// <param name="userAccesses">List of users and their accesses</param>
         /// <param name="userInRoles">List of users and their roles</param>
         /// <returns></returns>
-        public static List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+        public static List<WeightedJaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
-            InputValidator.CheckIfEmpty(userAccesses, nameof(userAccesses));
-            InputValidator.CheckIfEmpty(userInRoles, nameof(userInRoles));
+            var userAccessValidator = new UserAccessValidator();
+            var userInRoleValidator = new UserInRoleValidator();
+
+            var res1 = userAccessValidator.Validate(userAccesses);
+            var res2 = userInRoleValidator.Validate(userInRoles);
+
+            var allErrors = new List<ValidationFailure>();
+            allErrors.AddRange(res1.Errors);
+            allErrors.AddRange(res2.Errors);
+
+            if (allErrors.Count > 0)
+            {
+                var errorMessage = string.Join(Environment.NewLine, allErrors.Select(e => e.ErrorMessage));
+                throw new ArgumentException($"Validation failed: {Environment.NewLine}{errorMessage}", new ValidationException(allErrors));
+            }
 
             // Remove duplicates and tranform to set
             var distinctUserAccesses = new HashSet<UserAccess>();
@@ -60,7 +75,7 @@ namespace RoleMining.Library.Algorithms
             }
 
             // Create a list of Jaccard indices
-            var jaccardIndices = new List<Jaccard>();
+            var jaccardIndices = new List<WeightedJaccard>();
 
             // Calculate Jaccard index for each extra access to each role
             foreach (var accessToUsers in accesssToUsers) // Each access as a key, with the value as a list of users
@@ -75,7 +90,7 @@ namespace RoleMining.Library.Algorithms
 
                     var weight = CalculateJaccardWeight(amountOfUsersInRole, intersection);
 
-                    jaccardIndices.Add(new Jaccard
+                    jaccardIndices.Add(new WeightedJaccard
                     {
                         JaccardIndex = jaccardIndex,
                         WeightedJaccardIndex = jaccardIndex * weight,

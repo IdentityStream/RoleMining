@@ -1,31 +1,33 @@
-﻿using RoleMining.Library.Classes;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using RoleMining.Library.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace RoleMining.Library.Algorithms
 {
     /// <summary>
-    /// 
+    /// Class that contains the method <see cref="JaccardIndex.JaccardIndices"/> that calculates the Jaccard Index of extra accesses to roles.
     /// </summary>
     public class JaccardIndex
     {
         /// <summary>
         /// Finding the Jaccard Index of extra accesses to roles. A high Jaccard index means that the access fits the role.
         /// </summary>
-        /// <param name="userAccesses"></param>
-        /// <param name="userInRoles"></param>
-        /// <returns></returns>
+        /// <param name="userAccesses">A IEnumerable of <see cref="UserAccess"/>, where all accesses are extra accesses</param>
+        /// <param name="userInRoles">A IEnumerable of <see cref="UserInRole"/></param>
+        /// <returns>An ordered list of <see cref="Jaccard"/></returns>
         public static List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
-            // Matching extra access to existing roles based on how many of the users in the role has the access
-            InputValidator.CheckIfEmpty(userAccesses, nameof(userAccesses));
-            InputValidator.CheckIfEmpty(userInRoles, nameof(userInRoles));
+            InputValidator.Validate(userAccesses, nameof(userAccesses));
+            InputValidator.Validate(userInRoles, nameof(userInRoles));
 
             // Bad data handling
             // To be implented
 
             // Access -> Users
-            var accsessesWithListOfUsers = userAccesses.GroupBy(uA => uA.AccessID)
+            var accessesWithListOfUsers = userAccesses.GroupBy(uA => uA.AccessID)
                 .ToDictionary(group => group.Key, group => new HashSet<string>(group.Select(uA => uA.UserID).ToList()));
 
             // Role -> Users
@@ -39,7 +41,7 @@ namespace RoleMining.Library.Algorithms
             // Access -> Roles
             var rolesThatContainsUsersWithThisAccess = new Dictionary<string, HashSet<string>>();
 
-            foreach (var access in accsessesWithListOfUsers)
+            foreach (var access in accessesWithListOfUsers)
             {
                 foreach (var userID in access.Value)
                 {
@@ -64,38 +66,39 @@ namespace RoleMining.Library.Algorithms
             var jaccardIndices = new List<Jaccard>();
 
             // We find every extra access and role combination
-            foreach (var accessWithListOfUsers in accsessesWithListOfUsers)
+            foreach (var accessWithListOfUsers in accessesWithListOfUsers)
             {
+                var accessID = accessWithListOfUsers.Key;
                 // In the case where a user has no roles, we ignore it
-                if (!rolesThatContainsUsersWithThisAccess.ContainsKey(accessWithListOfUsers.Key))
+                if (!rolesThatContainsUsersWithThisAccess.ContainsKey(accessID))
                 {
                     continue;
                 }
-                foreach (var roleID in rolesThatContainsUsersWithThisAccess[accessWithListOfUsers.Key])
+                foreach (var roleID in rolesThatContainsUsersWithThisAccess[accessID])
                 {
-                    int usersWithRoleAndExtraAccess = 0;// Amount of users with the same role and same access (as extra). List<string> intersect List<string>, the first list is users in the role and the second list is users with the access
+                    var usersWithExtraAccess = accessWithListOfUsers.Value;
+                    var usersWithRole = usersInRolesDictionary[roleID];
+                    int usersWithRoleAndExtraAccess = 0;
 
                     // Count how many users in the role has the access
-                    foreach (var user in usersInRolesDictionary[roleID])
+                    foreach (var user in usersWithRole)
                     {
-                        if (accessWithListOfUsers.Value.Contains(user))
+                        if (usersWithExtraAccess.Contains(user))
                         {
                             usersWithRoleAndExtraAccess++;
                         }
                     }
 
-                    // Amount of users from role + Amount of users from access
-                    var union = accessWithListOfUsers.Value.Count() + (usersInRolesDictionary[roleID].Count() - usersWithRoleAndExtraAccess);
+                    var union = usersWithRole.Count() + usersWithExtraAccess.Count() - usersWithRoleAndExtraAccess;
                     var jaccardIndex = (double)usersWithRoleAndExtraAccess / union; // Similarity between the access and the role, high similarity = high Jaccard index
 
                     jaccardIndices.Add(new Jaccard
                     {
                         JaccardIndex = jaccardIndex,
-                        WeightedJaccardIndex = 0,
                         RoleID = roleID,
-                        AccessID = accessWithListOfUsers.Key,
+                        AccessID = accessID,
                         UsersWithAccessAndRole = usersWithRoleAndExtraAccess,
-                        UsersWithoutAccessWithRole = usersInRolesDictionary[roleID].Count() - usersWithRoleAndExtraAccess
+                        UsersWithoutAccessWithRole = usersWithRole.Count() - usersWithRoleAndExtraAccess
                     });
                 }
             }

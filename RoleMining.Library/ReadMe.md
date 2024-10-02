@@ -1,12 +1,17 @@
 # RoleMining.Library
 
-A C# library for mining roles from a RBAC system. The library aims to provide different algorithms to reduce the number of extra accesses given to users in a RBAC system, this by recommending accesses to be made standard in a role, or by recommending a new role to be created.
+This is a work-in-progress C# library designed for mining roles from a Role-Based Access Control (RBAC) system. 
+The library aims to provide various algorithms that help reduce the number of extra accesses granted to users. It achieves this by:
+
+- **Standard Accesses:** Suggestions for accesses that can be made standard within a given role, thereby reducing the number of extra accesses assigned to users.
+
+- **Role Creation:** Recommendations for new roles to be created based on user access patterns, enhancing the overall efficiency of the access control system.
+
+As the library is still under development, additional features and enhancements will be added over time.
 
 ## Features (For now)
-- **MineRoles** method that inputs a list of UserAccess and UserInRole objects and outputs a list of RatioAccessLevel objects.
-- **JaccardIndices** method that inputs a list of UserAccess and UserInRole objects and outputs a list of JaccardIndex objects. This is useful for getting an overview of which extra accesses fit each role. Also contains the (homemade) Weighted Jaccard Index.
+- **JaccardIndices** method that takes a list of UserAccess and UserInRole objects as input and outputs a list of JaccardIndex objects. This is useful for getting an overview of which extra accesses fit each role.
 - **UserAccess** and **UserInRole** classes for input.
-- **RatioAccessLevel** class for output.
 
 ## Syntax
 **MineRoles**
@@ -23,36 +28,25 @@ A C# library for mining roles from a RBAC system. The library aims to provide di
 
 Classes
 ```csharp
-    public class UserAccess
+	public class UserAccess
 	{
 		public string UserID { get; set; }
 		public string AccessLevelID { get; set; }
 		public string AccessID { get; set; }
-
 	}
 
-    public class UserInRole
+	public class UserInRole
 	{
 		public string RoleID { get; set; }
 		public string UserID { get; set; }
 	}
-	
-    public class AccessInRoleSummarized
-	{
-		public string RoleID { get; set; }
-		public string AccessID { get; set; }
-		public double Ratio { get; set; }
-		public int UsersWithAccessAsExtra { get; set; }
-		public int TotalUsers { get; set; }
-	}
 
 	public class JaccardIndex
 	{
-        public double JaccardIndex { get; set; }
-        public double WeightedJaccardIndex { get; set; }
-        public string RoleID { get; set; }
-        public string AccessID { get; set; }
-        public int UsersWithAccess { get; set; }
-        public int UsersWithoutAccess { get; set; }
+		public double JaccardIndex { get; set; }
+		public string RoleID { get; set; }
+		public string AccessID { get; set; }
+		public int UsersWithAccess { get; set; }
+		public int UsersWithoutAccess { get; set; }
 	}
 ```

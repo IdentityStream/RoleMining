@@ -1,15 +1,15 @@
 ﻿namespace RoleMining.Tests;
 
 using FluentAssertions;
-using RoleMining.Library;
+using RoleMining.Library.Algorithms;
 using RoleMining.Library.Classes;
 using System.Collections.Generic;
 using Xunit;
 
-public class JaccardTest : IAlgorithmTest
+public class JaccardIndexTest
 {
     [Fact]
-    public void RunCode()
+    public void Should_not_throw_when_inputs_are_valid()
     {
         var userAccesses = new List<UserAccess>
         {
@@ -34,35 +34,44 @@ public class JaccardTest : IAlgorithmTest
             new UserInRole { UserID = "7", RoleID = "D" },
             new UserInRole { UserID = "8", RoleID = "D" }
         };
-        var jaccard = RoleMining.JaccardIndices(userAccesses, userInRoles);
-        Assert.Equal(1, 1);
+        var act = new Action(() => JaccardIndex.JaccardIndices(userAccesses, userInRoles));
+        act.Should().NotThrow();
     }
 
-    [Fact]
-    public void TestNullOrEmptyValues()
+    public static IEnumerable<object[]> GetNullOrEmptyValues()
     {
-        var userAccesses = new List<UserAccess>();
-        var userInRoles = new List<UserInRole>();
-
-        userAccesses.Add(new UserAccess {
-            UserID = "",
-            AccessID = ""
-        });
-        var userInRole = new UserInRole {
-            UserID = "",
-            RoleID = ""
-        };
-
-        // Act
-
-        FluentActions.Invoking(() => RoleMining.JaccardIndices(null, null)).Should().Throw<ArgumentNullException>();
-        FluentActions.Invoking(() => RoleMining.JaccardIndices(userAccesses, null)).Should().Throw<ArgumentNullException>();
-        FluentActions.Invoking(() => RoleMining.JaccardIndices(null, userInRoles)).Should().Throw<ArgumentNullException>();
-        FluentActions.Invoking(() => RoleMining.JaccardIndices(userAccesses, userInRoles)).Should().Throw<ArgumentException>();
+        yield return new object[] { null, 
+                                    null, 
+                                    typeof(ArgumentNullException) };
+        yield return new object[] { new List<UserAccess>(),
+                                    new List<UserInRole>(),
+                                    typeof(ArgumentException) };            
+        yield return new object[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } }, 
+                                    null, 
+                                    typeof(ArgumentException) };
+        yield return new object[] { null, 
+                                    new List<UserInRole> { new() { UserID = "", RoleID = "" } }, 
+                                    typeof(ArgumentNullException) };
+        yield return new object[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } }, 
+                                    new List<UserInRole> { new() { UserID = "", RoleID = "" } },
+                                    typeof(ArgumentException) };
+    }
+    [Theory]
+    [MemberData(nameof(GetNullOrEmptyValues))]
+    public void Should_throw_when_inputs_are_null_or_empty(List<UserAccess> userAccesses, List<UserInRole> userInRoles, Type typeOfException)
+    {
+        try
+        {
+            JaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        }
+        catch (Exception e)
+        {
+            e.Should().BeOfType(typeOfException);
+        }
     }
 
     [Fact]
-    public void TestBasicFunctionality()
+    public void Should_return_correct_JaccardIndex_for_given_few_inputs()
     {
         var userAccesses = new List<UserAccess>
         {
@@ -78,7 +87,7 @@ public class JaccardTest : IAlgorithmTest
             new UserInRole { UserID = "4", RoleID = "A" }
         };
 
-        var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
+        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
 
         result.Should()
             .HaveCount(2)
@@ -90,12 +99,12 @@ public class JaccardTest : IAlgorithmTest
     }
 
     [Fact]
-    public void TestLargeData()
+    public void Should_return_correct_amount_for_100000_inputs()
     {
         var userInRoles = new List<UserInRole>();
         var userAccesses = new List<UserAccess>();
 
-        var iterations = 10000;
+        var iterations = 100000;
 
         // Generate 10,000 users, all in role "A"
         for (int i = 1; i <= iterations; i++)
@@ -109,12 +118,12 @@ public class JaccardTest : IAlgorithmTest
             userAccesses.Add(new UserAccess { UserID = i.ToString(), AccessID = $"{i}" });
         }
 
-        var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
+        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
         result.Should().HaveCount(iterations);
     }
 
     [Fact]
-    public void JaccardIndex_AllUsersHaveSameExtraAccessAndRole()
+    public void Should_return_perfect_JaccardIndex_when_all_users_have_access_and_role()
     {
         var userAccesses = new List<UserAccess>
         {
@@ -132,13 +141,13 @@ public class JaccardTest : IAlgorithmTest
             new UserInRole { UserID = "7", RoleID = "A" },
 
         };
-        var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
+        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
         result.Should().HaveCount(1);
         result[0].JaccardIndex.Should().Be(1.0);
     }
 
     [Fact]
-    public void JaccardIndex_LargeDatasetWithMultipleRoles()
+    public void Should_return_correct_amount_for_input_with_multiple_roles()
     {
         var userInRoles = new List<UserInRole>();
         var accessInRole = new List<AccessInRole>();
@@ -159,12 +168,12 @@ public class JaccardTest : IAlgorithmTest
             }
         }
 
-        var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
+        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
         result.Should().OnlyHaveUniqueItems();
     }
 
     [Fact]
-    public void JaccardIndex_MultipleRoles()
+    public void Should_return_correct_JaccardIndex_for_multiple_roles()
     {
         var userAccesses = new List<UserAccess>
         {
@@ -213,7 +222,7 @@ public class JaccardTest : IAlgorithmTest
         };
 
         // Act
-        var result = RoleMining.JaccardIndices(userAccesses, userInRoles);
+        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
 
         // Assert
         result.Should()
