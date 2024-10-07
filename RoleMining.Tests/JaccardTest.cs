@@ -108,9 +108,9 @@ public class JaccardIndexTest
         result.Should()
             .HaveCount(2)
             .And
-            .Contain(result => result.RoleID == "A" && result.AccessID == "Read" && result.JaccardIndex == 0.25)
+            .Contain(result => result.RoleID == "A" && result.AccessID == "Read" && result.AccessToRoleScore == 0.25)
             .And
-            .Contain(result => result.RoleID == "A" && result.AccessID == "Write" && result.JaccardIndex == 0.25)
+            .Contain(result => result.RoleID == "A" && result.AccessID == "Write" && result.AccessToRoleScore == 0.25)
             ;
     }
 
@@ -159,7 +159,7 @@ public class JaccardIndexTest
         };
         var result = _jaccardIndex.CalculateScores(userAccesses, userInRoles);
         result.Should().HaveCount(1);
-        result[0].JaccardIndex.Should().Be(1.0);
+        result[0].AccessToRoleScore.Should().Be(1.0);
     }
 
     [Fact]
@@ -244,8 +244,8 @@ public class JaccardIndexTest
         result.Should()
             .HaveCount(2)
             .And
-            .Contain(r => r.RoleID == "A" && r.AccessID == "Read" && r.JaccardIndex == 0.5)
+            .Contain(r => r.RoleID == "A" && r.AccessID == "Read" && r.AccessToRoleScore == 0.5)
             .And
-            .Contain(r => r.RoleID == "B" && r.AccessID == "Read" && r.JaccardIndex == 0.25);
+            .Contain(r => r.RoleID == "B" && r.AccessID == "Read" && r.AccessToRoleScore == 0.25);
     }
 }

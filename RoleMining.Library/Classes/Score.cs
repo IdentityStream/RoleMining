@@ -3,14 +3,14 @@ using System.Collections.Generic;
 namespace RoleMining.Library.Classes
 {
     /// <summary>
-    /// Return object for <see cref="JaccardIndex.CalculateScores"/>
+    /// Return object for <see cref="IAccessInRoleRecommender.CalculateScores"/>
     /// </summary>
-    public class Jaccard
+    public class Score
     {
         /// <summary>
         /// Jacard Index of the access to role
         /// </summary>
-        public double JaccardIndex { get; set; }
+        public double AccessToRoleScore { get; set; }
 
         /// <summary>
         /// The role ID, unique identifier for each role.

@@ -16,7 +16,7 @@ namespace RoleMining.Library.Algorithms
         /// <param name="userAccesses">A IEnumerable of <see cref="UserAccess"/>, where all accesses are extra accesses</param>
         /// <param name="userInRoles">A IEnumerable of <see cref="UserInRole"/></param>
         /// <returns>An ordered list of <see cref="Jaccard"/></returns>
-        public List<Jaccard> CalculateScores(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+        public List<Score> CalculateScores(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
             var userAccessValidator = new UserAccessValidator();
             var userInRoleValidator = new UserInRoleValidator();
@@ -65,7 +65,7 @@ namespace RoleMining.Library.Algorithms
             }
 
 
-            var jaccardIndices = new List<Jaccard>();
+            var jaccardIndices = new List<Score>();
 
             // We find every extra access and role combination
             foreach (var accessWithListOfUsers in accessesWithListOfUsers)
@@ -94,9 +94,9 @@ namespace RoleMining.Library.Algorithms
                     var union = usersWithRole.Count() + usersWithExtraAccess.Count() - usersWithRoleAndExtraAccess;
                     var jaccardIndex = (double)usersWithRoleAndExtraAccess / union; // Similarity between the access and the role, high similarity = high Jaccard index
 
-                    jaccardIndices.Add(new Jaccard
+                    jaccardIndices.Add(new Score
                     {
-                        JaccardIndex = jaccardIndex,
+                        AccessToRoleScore = jaccardIndex,
                         RoleID = roleID,
                         AccessID = accessID,
                         UsersWithAccessAndRoleCount = usersWithRoleAndExtraAccess,
@@ -108,7 +108,7 @@ namespace RoleMining.Library.Algorithms
             }
             return jaccardIndices
                 .OrderBy(j => j.AccessID)
-                .ThenByDescending(j => j.JaccardIndex)
+                .ThenByDescending(j => j.AccessToRoleScore)
                 .ThenByDescending(j => j.UsersWithAccessAndRoleCount)
                 .ToList();
 
