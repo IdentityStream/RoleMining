@@ -12,10 +12,10 @@ using RoleMining.Library.Clustering;
 
 namespace RoleMining.Tests;
 
-public class KclusterTest : IAlgorithmTest
+public class KclusterTest
 {
     [Fact]
-    public void RunCode()
+    public void Should_not_throw_when_inputs_are_valid()
     {
         var userAccess = new List<UserAccess>
         {
@@ -30,9 +30,8 @@ public class KclusterTest : IAlgorithmTest
             new UserAccess { UserID = "8", AccessID = "Write" }
         };
 
-        var result = Kcluster.Cluster(userAccess);
-
-        Assert.Equal(1, 1);
+        var act = () => Kcluster.Cluster(userAccess);
+        act.Should().NotThrow();
     }
 
     [Fact]
@@ -48,20 +47,19 @@ public class KclusterTest : IAlgorithmTest
     }
 
     [Fact]
-    public void TestLargeData()
+    public void Should_return_single_cluster_when_all_users_have_the_same_accesses()
     {
-        var userInRoles = new List<UserInRole>();
         var userAccesses = new List<UserAccess>();
 
-        var iterations = 10000;
+        var iterations = 1000;  
 
-        // Assign 10,000 users access to "read"
+        // Assign users access to "read"
         for (int i = 1; i <= iterations; i++)
         {
-            userAccesses.Add(new UserAccess { UserID = i.ToString(), AccessID = $"{i}" });
+            userAccesses.Add(new UserAccess { UserID = i.ToString(), AccessID = $"Read" });
         }
 
         var result = Kcluster.Cluster(userAccesses);
-        Assert.Equal(1, 1);  // Expecting 1 role with 10,000 users
+        result.Should().ContainSingle();
     }
 }

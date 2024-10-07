@@ -1,12 +1,13 @@
 ﻿using RoleMining.Library.Classes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
+using System.Text;
 
 namespace RoleMining.Library.Clustering
 {
-    public class Kcluster
+    public class Kcluster2
     {
         public static List<UserCluster> Cluster(IEnumerable<UserAccess> userAccesses, List<string> usersToStartClusters, int similarityThreshold = 1)
         {
@@ -29,7 +30,7 @@ namespace RoleMining.Library.Clustering
 
             foreach (var user in uniqueUsers)
             {
-                var userVector = new UserAccessVector{UserID = user, AccessVector = new BitArray(uniqueAccesses.Count())};
+                var userVector = new UserAccessVector { UserID = user, AccessVector = new BitArray(uniqueAccesses.Count()) };
 
                 if (userAccessDict.TryGetValue(user, out var userAccessSet))
                 {
@@ -59,7 +60,7 @@ namespace RoleMining.Library.Clustering
                 foreach (var cluster in clusters)
                 {
                     // Compare to the first user in the cluster
-                    if  (HammingDistance(user.AccessVector, cluster.AccessVector) < similarityThreshold)
+                    if (HammingDistance(user.AccessVector, cluster.AccessVector) < similarityThreshold)
                     {
 
                         cluster.Users.Add(user);
@@ -91,41 +92,43 @@ namespace RoleMining.Library.Clustering
         }
 
         public static int HammingDistance(BitArray a, BitArray b)
-    {
-        if (a.Length != b.Length)
         {
-            throw new ArgumentException("The two BitArrays must be of the same length.");
-        }
-
-        // XOR operation to find differing bits
-        BitArray xorResult = a.Xor(b);
-
-        // Count the number of bits true
-        int distance = 0;
-        foreach (bool bit in xorResult)
-        {
-            if (bit)
+            if (a.Length != b.Length)
             {
-                distance++;
+                throw new ArgumentException("The two BitArrays must be of the same length.");
             }
-        }
 
-        return distance;
-        }
-        public class UserAccessVector
-        {
-            public string UserID { get; set; }
-            public BitArray AccessVector { get; set; } // BitArray for binary role presence
-        }
-        public class UserCluster
-        {
-            public List<string> Accesses { get; set; }
-            public int AmountOfAccesses  { get; set; }
-            public List<string> UsersInCluster { get; set; }
+            // XOR operation to find differing bits
+            BitArray xorResult = a.Xor(b);
 
-            public List<UserAccessVector> Users { get; set; }
-            public BitArray AccessVector { get; set; }
+            // Count the number of bits true
+            int distance = 0;
+            foreach (bool bit in xorResult)
+            {
+                if (bit)
+                {
+                    distance++;
+                }
+            }
 
+            return distance;
         }
+    }
+
+    public class UserAccessVector
+    {
+        public string UserID { get; set; }
+        public BitArray AccessVector { get; set; } // BitArray for binary role presence
+    }
+
+    public class UserCluster
+    {
+        public List<string> Accesses { get; set; }
+        public int AmountOfAccesses { get; set; }
+        public List<string> UsersInCluster { get; set; }
+
+        public List<UserAccessVector> Users { get; set; }
+        public BitArray AccessVector { get; set; }
+
     }
 }
