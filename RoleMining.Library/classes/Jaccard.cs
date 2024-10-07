@@ -2,7 +2,7 @@
 namespace RoleMining.Library.Classes
 {
     /// <summary>
-    /// Return object for the <seealso cref="JaccardIndex.JaccardIndices"/> and <seealso cref="WeightedJaccardIndex.JaccardIndices"/>
+    /// Return object for <see cref="JaccardIndex.JaccardIndices"/>
     /// </summary>
     public class Jaccard
     {
