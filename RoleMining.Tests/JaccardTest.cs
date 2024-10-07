@@ -38,23 +38,23 @@ public class JaccardIndexTest
         act.Should().NotThrow();
     }
 
-    public static IEnumerable<object[]> GetNullOrEmptyValues()
+    public static IEnumerable<Object?[]> GetNullOrEmptyValues()
     {
-        yield return new object[] { null, 
-                                    null, 
-                                    typeof(ArgumentNullException) };
-        yield return new object[] { new List<UserAccess>(),
-                                    new List<UserInRole>(),
-                                    typeof(ArgumentException) };            
-        yield return new object[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } }, 
-                                    null, 
-                                    typeof(ArgumentException) };
-        yield return new object[] { null, 
-                                    new List<UserInRole> { new() { UserID = "", RoleID = "" } }, 
-                                    typeof(ArgumentNullException) };
-        yield return new object[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } }, 
-                                    new List<UserInRole> { new() { UserID = "", RoleID = "" } },
-                                    typeof(ArgumentException) };
+        yield return new Object?[] { null,
+                                     null,
+                                     typeof(ArgumentNullException) };
+        yield return new Object?[] { new List<UserAccess>(),
+                                     new List<UserInRole>(),
+                                     typeof(ArgumentException) };
+        yield return new Object?[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } },
+                                     null,
+                                     typeof(ArgumentException) };
+        yield return new Object?[] { null,
+                                     new List<UserInRole> { new() { UserID = "", RoleID = "" } },
+                                     typeof(ArgumentNullException) };
+        yield return new Object?[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } },
+                                     new List<UserInRole> { new() { UserID = "", RoleID = "" } },
+                                     typeof(ArgumentException) };
     }
     [Theory]
     [MemberData(nameof(GetNullOrEmptyValues))]
