@@ -4,7 +4,7 @@ namespace RoleMining.Library.Classes
     /// UserAccess object
     /// </summary>
     public class UserAccess
-	{
+    {
         /// <summary>
         /// Unique identifier for each user.
         /// </summary>

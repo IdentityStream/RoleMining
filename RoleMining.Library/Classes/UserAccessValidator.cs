@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using FluentValidation;
 using System.Collections.Generic;
-using System.Text;
-using FluentValidation;
 
 namespace RoleMining.Library.Classes
 {
     internal class UserAccessValidator : AbstractValidator<IEnumerable<UserAccess>>
     {
-        public UserAccessValidator() 
+        public UserAccessValidator()
         {
             RuleFor(RuleFor => RuleFor).NotEmpty().WithMessage("{PropertyName} cannot be empty");
             RuleForEach(UserAccess => UserAccess).SetValidator(new SingleUserAccessValidator());

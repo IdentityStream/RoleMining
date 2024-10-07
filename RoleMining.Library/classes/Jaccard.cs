@@ -1,4 +1,5 @@
 ﻿using RoleMining.Library.Algorithms;
+using System.Collections.Generic;
 namespace RoleMining.Library.Classes
 {
     /// <summary>
@@ -24,11 +25,21 @@ namespace RoleMining.Library.Classes
         /// <summary>
         /// Amount of users with the role and the access
         /// </summary>
-        public int UsersWithAccessAndRole { get; set; }
+        public int UsersWithAccessAndRoleCount { get; set; }
 
         /// <summary>
         /// Amount of users with the role, but not with the access
         /// </summary>
-        public int UsersWithoutAccessWithRole { get; set; }
+        public int UsersWithoutAccessWithRoleCount { get; set; }
+
+        /// <summary>
+        /// List of userIDs with the role
+        /// </summary>
+        public List<string> UsersWithAccessAndRole { get; set; }
+
+        /// <summary>
+        /// List of UserIDs with the role, but not with the access
+        /// </summary>
+        public List<string> UsersWithoutAccessWithRole { get; set; }
     }
 }

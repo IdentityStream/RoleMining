@@ -1,13 +1,29 @@
 ﻿namespace RoleMining.Tests;
 
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using RoleMining.Library.Algorithms;
 using RoleMining.Library.Classes;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
 public class JaccardIndexTest
 {
+
+    private readonly ServiceProvider _serviceProvider;
+    private readonly JaccardIndex _jaccardIndex;
+
+    // Constructor to set up the service provider
+    public JaccardIndexTest()
+    {
+        // Configure the DI container
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddRoleMining(); // Use your extension method to add services
+        _serviceProvider = serviceCollection.BuildServiceProvider();
+        _jaccardIndex = _serviceProvider.GetService<JaccardIndex>();
+    }
+
     [Fact]
     public void Should_not_throw_when_inputs_are_valid()
     {
@@ -34,7 +50,7 @@ public class JaccardIndexTest
             new UserInRole { UserID = "7", RoleID = "D" },
             new UserInRole { UserID = "8", RoleID = "D" }
         };
-        var act = new Action(() => JaccardIndex.JaccardIndices(userAccesses, userInRoles));
+        var act = new Action(() => _jaccardIndex.JaccardIndices(userAccesses, userInRoles));
         act.Should().NotThrow();
     }
 
@@ -62,7 +78,7 @@ public class JaccardIndexTest
     {
         try
         {
-            JaccardIndex.JaccardIndices(userAccesses, userInRoles);
+            _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
         }
         catch (Exception e)
         {
@@ -87,7 +103,7 @@ public class JaccardIndexTest
             new UserInRole { UserID = "4", RoleID = "A" }
         };
 
-        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
 
         result.Should()
             .HaveCount(2)
@@ -118,7 +134,7 @@ public class JaccardIndexTest
             userAccesses.Add(new UserAccess { UserID = i.ToString(), AccessID = $"{i}" });
         }
 
-        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
         result.Should().HaveCount(iterations);
     }
 
@@ -141,7 +157,7 @@ public class JaccardIndexTest
             new UserInRole { UserID = "7", RoleID = "A" },
 
         };
-        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
         result.Should().HaveCount(1);
         result[0].JaccardIndex.Should().Be(1.0);
     }
@@ -168,7 +184,7 @@ public class JaccardIndexTest
             }
         }
 
-        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
         result.Should().OnlyHaveUniqueItems();
     }
 
@@ -222,7 +238,7 @@ public class JaccardIndexTest
         };
 
         // Act
-        var result = JaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
 
         // Assert
         result.Should()

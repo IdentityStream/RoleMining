@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using RoleMining.Library.Classes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,16 +10,25 @@ namespace RoleMining.Library.Algorithms
     /// </summary>
     public class JaccardIndex
     {
+        public readonly IValidator<IEnumerable<UserAccess>> _userAccessValidator;
+        public readonly IValidator<IEnumerable<UserInRole>> _userInRoleValidator;
+
+        public JaccardIndex(IValidator<IEnumerable<UserAccess>> userAccessValidator, IValidator<IEnumerable<UserInRole>> userInRoleValidator)
+        {
+            _userAccessValidator = userAccessValidator;
+            _userInRoleValidator = userInRoleValidator;
+        }
+
         /// <summary>
         /// Finding the Jaccard Index of extra accesses to roles. A high Jaccard index means that the access fits the role.
         /// </summary>
         /// <param name="userAccesses">A IEnumerable of <see cref="UserAccess"/>, where all accesses are extra accesses</param>
         /// <param name="userInRoles">A IEnumerable of <see cref="UserInRole"/></param>
         /// <returns>An ordered list of <see cref="Jaccard"/></returns>
-        public static List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+        public List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
-            InputValidator.Validate(userAccesses, nameof(userAccesses));
-            InputValidator.Validate(userInRoles, nameof(userInRoles));
+            _userAccessValidator.ValidateAndThrow(userAccesses);
+            _userInRoleValidator.ValidateAndThrow(userInRoles);
 
             // Bad data handling
             // To be implented
@@ -97,12 +104,19 @@ namespace RoleMining.Library.Algorithms
                         JaccardIndex = jaccardIndex,
                         RoleID = roleID,
                         AccessID = accessID,
-                        UsersWithAccessAndRole = usersWithRoleAndExtraAccess,
-                        UsersWithoutAccessWithRole = usersWithRole.Count() - usersWithRoleAndExtraAccess
+                        UsersWithAccessAndRoleCount = usersWithRoleAndExtraAccess,
+                        UsersWithoutAccessWithRoleCount = usersWithRole.Count() - usersWithRoleAndExtraAccess,
+                        UsersWithAccessAndRole = usersWithRole.Intersect(usersWithExtraAccess).OrderBy(u => u).ToList(),
+                        UsersWithoutAccessWithRole = usersWithRole.Except(usersWithExtraAccess).OrderBy(u => u).ToList()
                     });
                 }
             }
-            return jaccardIndices.OrderByDescending(j => j.JaccardIndex).ThenByDescending(j => j.UsersWithAccessAndRole).ToList();
+            return jaccardIndices
+                .OrderBy(j => j.AccessID)
+                .ThenByDescending(j => j.JaccardIndex)
+                .ThenByDescending(j => j.UsersWithAccessAndRoleCount)
+                .ToList();
+
         }
     }
 }
