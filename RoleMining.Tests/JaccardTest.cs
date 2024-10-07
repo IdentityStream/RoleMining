@@ -2,6 +2,7 @@
 
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using RoleMining.Library;
 using RoleMining.Library.Algorithms;
 using RoleMining.Library.Classes;
 using System;
@@ -10,9 +11,8 @@ using Xunit;
 
 public class JaccardIndexTest
 {
-
     private readonly ServiceProvider _serviceProvider;
-    private readonly JaccardIndex _jaccardIndex;
+    private readonly IAccessInRoleRecommender _jaccardIndex;
 
     // Constructor to set up the service provider
     public JaccardIndexTest()
@@ -21,7 +21,7 @@ public class JaccardIndexTest
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddRoleMining(); // Use your extension method to add services
         _serviceProvider = serviceCollection.BuildServiceProvider();
-        _jaccardIndex = _serviceProvider.GetService<JaccardIndex>();
+        _jaccardIndex = _serviceProvider.GetService<IAccessInRoleRecommender>();
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class JaccardIndexTest
             new UserInRole { UserID = "7", RoleID = "D" },
             new UserInRole { UserID = "8", RoleID = "D" }
         };
-        var act = new Action(() => _jaccardIndex.JaccardIndices(userAccesses, userInRoles));
+        var act = new Action(() => _jaccardIndex.CalculateScores(userAccesses, userInRoles));
         act.Should().NotThrow();
     }
 
@@ -78,7 +78,7 @@ public class JaccardIndexTest
     {
         try
         {
-            _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
+            _jaccardIndex.CalculateScores(userAccesses, userInRoles);
         }
         catch (Exception e)
         {
@@ -103,7 +103,7 @@ public class JaccardIndexTest
             new UserInRole { UserID = "4", RoleID = "A" }
         };
 
-        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.CalculateScores(userAccesses, userInRoles);
 
         result.Should()
             .HaveCount(2)
@@ -134,7 +134,7 @@ public class JaccardIndexTest
             userAccesses.Add(new UserAccess { UserID = i.ToString(), AccessID = $"{i}" });
         }
 
-        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.CalculateScores(userAccesses, userInRoles);
         result.Should().HaveCount(iterations);
     }
 
@@ -157,7 +157,7 @@ public class JaccardIndexTest
             new UserInRole { UserID = "7", RoleID = "A" },
 
         };
-        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.CalculateScores(userAccesses, userInRoles);
         result.Should().HaveCount(1);
         result[0].JaccardIndex.Should().Be(1.0);
     }
@@ -184,7 +184,7 @@ public class JaccardIndexTest
             }
         }
 
-        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.CalculateScores(userAccesses, userInRoles);
         result.Should().OnlyHaveUniqueItems();
     }
 
@@ -238,7 +238,7 @@ public class JaccardIndexTest
         };
 
         // Act
-        var result = _jaccardIndex.JaccardIndices(userAccesses, userInRoles);
+        var result = _jaccardIndex.CalculateScores(userAccesses, userInRoles);
 
         // Assert
         result.Should()

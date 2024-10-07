@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace RoleMining.Library.Classes
 {
     /// <summary>
-    /// Return object for <see cref="JaccardIndex.JaccardIndices"/>
+    /// Return object for <see cref="JaccardIndex.CalculateScores"/>
     /// </summary>
     public class Jaccard
     {

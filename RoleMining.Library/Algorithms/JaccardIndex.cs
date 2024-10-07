@@ -1,34 +1,29 @@
-﻿using FluentValidation;
-using RoleMining.Library.Classes;
+﻿using RoleMining.Library.Classes;
+using RoleMining.Library.Validation;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace RoleMining.Library.Algorithms
 {
     /// <summary>
-    /// Class that contains the method <see cref="JaccardIndex.JaccardIndices"/> that calculates the Jaccard Index of extra accesses to roles.
+    /// Class that contains the method <see cref="JaccardIndex.CalculateScores"/> that calculates the Jaccard Index of extra accesses to roles.
     /// </summary>
-    public class JaccardIndex
+    public class JaccardIndex : IAccessInRoleRecommender
     {
-        public readonly IValidator<IEnumerable<UserAccess>> _userAccessValidator;
-        public readonly IValidator<IEnumerable<UserInRole>> _userInRoleValidator;
-
-        public JaccardIndex(IValidator<IEnumerable<UserAccess>> userAccessValidator, IValidator<IEnumerable<UserInRole>> userInRoleValidator)
-        {
-            _userAccessValidator = userAccessValidator;
-            _userInRoleValidator = userInRoleValidator;
-        }
-
         /// <summary>
         /// Finding the Jaccard Index of extra accesses to roles. A high Jaccard index means that the access fits the role.
         /// </summary>
         /// <param name="userAccesses">A IEnumerable of <see cref="UserAccess"/>, where all accesses are extra accesses</param>
         /// <param name="userInRoles">A IEnumerable of <see cref="UserInRole"/></param>
         /// <returns>An ordered list of <see cref="Jaccard"/></returns>
-        public List<Jaccard> JaccardIndices(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
+        public List<Jaccard> CalculateScores(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
-            _userAccessValidator.ValidateAndThrow(userAccesses);
-            _userInRoleValidator.ValidateAndThrow(userInRoles);
+            var userAccessValidator = new UserAccessValidator();
+            var userInRoleValidator = new UserInRoleValidator();
+
+            userAccessValidator.ValidateAndThrowArgumentExceptions(userAccesses, nameof(userAccesses));
+            userInRoleValidator.ValidateAndThrowArgumentExceptions(userInRoles, nameof(userInRoles));
+
 
             // Bad data handling
             // To be implented

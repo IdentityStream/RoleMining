@@ -1,7 +1,8 @@
 ﻿using FluentValidation;
+using RoleMining.Library.Classes;
 using System.Collections.Generic;
 
-namespace RoleMining.Library.Classes
+namespace RoleMining.Library.Validation
 {
     internal class UserInRoleValidator : AbstractValidator<IEnumerable<UserInRole>>
     {
