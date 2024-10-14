@@ -11,9 +11,8 @@ namespace RoleMining.Library
         /// <summary>
         /// Method to add RoleMining algorithm services to the service collection.
         /// </summary>
-        /// <param name="services"></param>
-        /// <param name="algorithm"></param>
-        /// <param name=""></param>
+        /// <param name="services">Your ServiceCollection</param>
+        /// <param name="algorithm">RecommenderAlgorithm to be added to the ServiceCollection</param>
         public static void AddRoleMining(
             this IServiceCollection services,
             RecommenderAlgorithm algorithm = RecommenderAlgorithm.JaccardIndex
@@ -27,8 +26,14 @@ namespace RoleMining.Library
             }
         }
     }
+    /// <summary>
+    /// Algoritms that can be used for recommending accesses to be baked into roles.
+    /// </summary>
     public enum RecommenderAlgorithm
     {
+        /// <summary>
+        /// See <see cref="JaccardIndex.CalculateScores"/>
+        /// </summary>
         JaccardIndex,
     }
 }
