@@ -54,21 +54,21 @@ public class JaccardIndexTest
         act.Should().NotThrow();
     }
 
-    public static IEnumerable<Object?[]> GetNullOrEmptyValues()
+    public static IEnumerable<object?[]> GetNullOrEmptyValues()
     {
-        yield return new Object?[] { null,
+        yield return new object?[] { null,
                                      null,
                                      typeof(ArgumentNullException) };
-        yield return new Object?[] { new List<UserAccess>(),
+        yield return new object?[] { new List<UserAccess>(),
                                      new List<UserInRole>(),
                                      typeof(ArgumentException) };
-        yield return new Object?[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } },
+        yield return new object?[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } },
                                      null,
                                      typeof(ArgumentException) };
-        yield return new Object?[] { null,
+        yield return new object?[] { null,
                                      new List<UserInRole> { new() { UserID = "", RoleID = "" } },
                                      typeof(ArgumentNullException) };
-        yield return new Object?[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } },
+        yield return new object?[] { new List<UserAccess> { new() { UserID = "", AccessID = "" } },
                                      new List<UserInRole> { new() { UserID = "", RoleID = "" } },
                                      typeof(ArgumentException) };
     }
