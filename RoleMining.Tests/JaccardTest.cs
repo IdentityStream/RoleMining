@@ -13,7 +13,7 @@ using Xunit.Sdk;
 public class JaccardIndexTest
 {
     private readonly ServiceProvider _serviceProvider;
-    private readonly IAccessInRoleRecommender? _jaccardIndex;
+    private readonly IAccessInRoleRecommender _jaccardIndex;
 
     // Constructor to set up the service provider
     public JaccardIndexTest()
