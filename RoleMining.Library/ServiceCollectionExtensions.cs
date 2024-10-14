@@ -16,20 +16,10 @@ namespace RoleMining.Library
                     services.AddTransient<IAccessInRoleRecommender, JaccardIndex>();
                     break;
             }
-            switch (roleBuilderAlgorithm)
-            {
-                case RoleBuilderAlgorithm.Kcluster:
-
-                    break;
-            }
         }
     }
     public enum RecommenderAlgorithm
     {
         JaccardIndex,
-    }
-    public enum RoleBuilderAlgorithm
-    {
-        Kcluster,
     }
 }
