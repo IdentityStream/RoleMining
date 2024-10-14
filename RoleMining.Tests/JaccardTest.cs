@@ -22,11 +22,7 @@ public class JaccardIndexTest
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddRoleMining(); // Use your extension method to add services
         _serviceProvider = serviceCollection.BuildServiceProvider();
-        _jaccardIndex = _serviceProvider.GetService<IAccessInRoleRecommender>();
-        if (_jaccardIndex == null)
-        {
-            throw new InvalidOperationException("IAccessInRoleRecommender service not found, _jaccardIndex is null");
-        };
+        _jaccardIndex = _serviceProvider.GetRequiredService<IAccessInRoleRecommender>();
     }
 
     [Fact]
