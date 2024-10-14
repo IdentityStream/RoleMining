@@ -8,11 +8,12 @@ using RoleMining.Library.Classes;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using Xunit.Sdk;
 
 public class JaccardIndexTest
 {
     private readonly ServiceProvider _serviceProvider;
-    private readonly IAccessInRoleRecommender _jaccardIndex;
+    private readonly IAccessInRoleRecommender? _jaccardIndex;
 
     // Constructor to set up the service provider
     public JaccardIndexTest()
@@ -22,6 +23,10 @@ public class JaccardIndexTest
         serviceCollection.AddRoleMining(); // Use your extension method to add services
         _serviceProvider = serviceCollection.BuildServiceProvider();
         _jaccardIndex = _serviceProvider.GetService<IAccessInRoleRecommender>();
+        if (_jaccardIndex == null)
+        {
+            throw new InvalidOperationException("IAccessInRoleRecommender service not found, _jaccardIndex is null");
+        };
     }
 
     [Fact]
