@@ -15,7 +15,7 @@ namespace RoleMining.Library.Algorithms
         /// </summary>
         /// <param name="userAccesses">A IEnumerable of <see cref="UserAccess"/>, where all accesses are extra accesses</param>
         /// <param name="userInRoles">A IEnumerable of <see cref="UserInRole"/></param>
-        /// <returns>An ordered list of <see cref="Jaccard"/></returns>
+        /// <returns>An ordered list of <see cref="Score"/></returns>
         public List<Score> CalculateScores(IEnumerable<UserAccess> userAccesses, IEnumerable<UserInRole> userInRoles)
         {
             var userAccessValidator = new UserAccessValidator();
