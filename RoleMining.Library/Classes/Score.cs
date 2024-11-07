@@ -28,6 +28,11 @@ namespace RoleMining.Library.Classes
         public int UsersWithAccessAndRoleCount { get; set; }
 
         /// <summary>
+        /// Amount of users with the access, but not with the role
+        /// </summary>
+        public int UsersWithAccessWithoutRoleCount { get; set; }
+
+        /// <summary>
         /// Amount of users with the role, but not with the access
         /// </summary>
         public int UsersWithoutAccessWithRoleCount { get; set; }
@@ -36,6 +41,11 @@ namespace RoleMining.Library.Classes
         /// List of userIDs with the role
         /// </summary>
         public List<string> UsersWithAccessAndRole { get; set; }
+
+        /// <summary>
+        /// List of userIDs with the access, but not with the role
+        /// </summary>
+        public List<string> UsersWithAccessWithoutRole { get; set; }
 
         /// <summary>
         /// List of UserIDs with the role, but not with the access

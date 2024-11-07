@@ -21,12 +21,9 @@ namespace RoleMining.Library.Algorithms
             var userAccessValidator = new UserAccessValidator();
             var userInRoleValidator = new UserInRoleValidator();
 
+            // TODO: Move validation outside of the method
             userAccessValidator.ValidateAndThrowArgumentExceptions(userAccesses, nameof(userAccesses));
             userInRoleValidator.ValidateAndThrowArgumentExceptions(userInRoles, nameof(userInRoles));
-
-
-            // Bad data handling
-            // To be implented
 
             // Access -> Users
             var accessesWithListOfUsers = userAccesses.GroupBy(uA => uA.AccessID)
@@ -100,9 +97,11 @@ namespace RoleMining.Library.Algorithms
                         RoleID = roleID,
                         AccessID = accessID,
                         UsersWithAccessAndRoleCount = usersWithRoleAndExtraAccess,
+                        UsersWithAccessWithoutRoleCount = usersWithExtraAccess.Count() - usersWithRoleAndExtraAccess,
                         UsersWithoutAccessWithRoleCount = usersWithRole.Count() - usersWithRoleAndExtraAccess,
                         UsersWithAccessAndRole = usersWithRole.Intersect(usersWithExtraAccess).OrderBy(u => u).ToList(),
-                        UsersWithoutAccessWithRole = usersWithRole.Except(usersWithExtraAccess).OrderBy(u => u).ToList()
+                        UsersWithoutAccessWithRole = usersWithRole.Except(usersWithExtraAccess).OrderBy(u => u).ToList(),
+                        UsersWithAccessWithoutRole = usersWithExtraAccess.Except(usersWithRole).OrderBy(u => u).ToList()
                     });
                 }
             }
